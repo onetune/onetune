@@ -1,0 +1,23 @@
+<div class="context-tip">
+	<img src="{{song.image}}" onload="$(this).removeClass('image-op0')" class="image-op0">
+	<h1><a data-navigate="/song/{{song.id}}">{{song.name}}</a></h1>
+	<h2><a data-navigate="/artist/{{song.artistid}}">{{song.artist}}</a></h2>
+</div>
+<div class="contextmenu-arrow"></div>
+<div class="context-options">
+	<div data-id="{{song.id}}" class="findandplay">Play</div>
+	<div data-id="{{song.id}}" class="findandqueue">Queue</div>
+	<a data-navigate="/song/{{song.id}}">
+		<div>Song page</div>
+	</a>
+	{% if state.loggedin %}
+		<div data-id="{{song.id}}" class="{% if incollection.inlib %} library-remove-button {% else %} library-button {% endif %}">{% if incollection.inlib %}Remove from library{% else %}Add to library{% endif %}</div>
+		<div data-id="{{song.id}}" class="contextmenu-add-to-playlist">Playlists...</div>
+	{% endif %}
+	<div data-navigate="/lyrics/{{song.id}}">Lyrics</div>
+</div>
+{% if !state.loggedin %}
+	<div class="footnote">
+		Login to see more options
+	</div>
+{% endif %}

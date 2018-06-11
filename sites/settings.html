@@ -1,0 +1,24 @@
+<div class="settings-page">
+	<div class="settings-header material-box">
+		<div class="playlistdescription coverstack-description">
+			<h1 class="settings-header-text">Settings</h1>
+		</div>
+	</div>
+	{% if user %}
+		<div class="settings material-box">
+			{% for setting in user.settings %}
+			<div class="setting" data-setting="{{setting.key}}">
+				<input type="checkbox" class="checkbox" id="setting_{{setting.key}}" {% if setting.value %} checked {% endif %}>
+				<label for="setting_{{setting.key}}">{{setting.label}}</label>
+			</div>
+			{% endfor %}
+		</div>
+	{% endif %}
+	<div class="settings material-box">
+		<h2>Language</h2>
+		<p>We are currently in the process of translating more and more of our website. Choose your preferred language:</p>
+		{% for lang in langs %}
+			<a style="text-decoration: underline; cursor: pointer;"><div data-lang="{{lang}}" class="change-language settings-lang">{{lang}}</div></a>
+		{% endfor %}
+	</div>
+</div>

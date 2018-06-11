@@ -1,0 +1,82 @@
+{% raw %}
+	<div>
+		<div class="v2-home">
+			<div data-bind="ifnot: isLoggedIn()" class="v2-welcome-banner">
+				<h1>Welcome to OneTune.fm!</h1>
+				<div class="v2-welcome-text">
+					<p>We have over 5 million tracks available for you to stream through YouTube.<br>
+					</p><br>
+					<p>Consider getting an account to save your music into your personal library:</p><span class="v2-welcome-register" data-navigate="/register">Create an account</span>
+				</div>
+			</div>
+			<!-- ko if: isLoggedIn() -->
+			<div class="v2-strip-wrapper" data-bind="css: {'v2-welcome-banner': library().length == 0}" style="position: relative; height: 200px;" >
+				<h1 data-navigate="/library">from your library</h1>
+				<div class="v2-song-strip-back"></div>
+				<div class="v2-song-strip-forward"></div>
+				<div class="v2-song-strip" data-represents="/library">
+					<!-- ko ifnot: library().length -->
+					<div class="v2-home-no-tracks">
+						<p>You don't have any tracks in your library yet.</p> <br>
+						<p>Click on the heart symbol anywhere on the site to add tracks to your library!</p>
+					</div>
+					<!-- /ko -->
+					<div class="v2-song-strip-tiles">
+						<div data-bind="foreach: library">
+							<!-- ko component: {
+								name: 'v2-song-box',
+								params: {song: $data}
+							} -->
+							<!-- /ko -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /ko -->
+			<div class="v2-strip-wrapper" data-bind="if: charts" style="position: relative; height: 200px;">
+				<h1 data-navigate="/charts">top charts</h1>
+				<div class="v2-song-strip-back"></div>
+				<div class="v2-song-strip-forward"></div>
+				<div class="v2-song-strip" data-represents="/charts">
+					<div class="v2-song-strip-tiles">
+						<div data-bind="foreach: charts">
+							<!-- ko component: {
+								name: 'v2-song-box',
+								params: {song: $data}
+							} -->
+							<!-- /ko -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="v2-strip-wrapper" data-bind="if: reddit" style="position: relative; height: 200px;">
+				<h1 data-navigate="/genres">hot on reddit</h1>
+				<div class="v2-song-strip-back"></div>
+				<div class="v2-song-strip-forward"></div>
+				<div class="v2-song-strip" data-represents="/genres">
+					<div data-bind="foreach: reddit">
+						<!-- ko component: {
+							name: 'v2-song-box',
+							params: {song: $data.song}
+						} -->
+						<!-- /ko -->
+					</div>
+				</div>
+			</div>
+			<div class="v2-strip-wrapper" data-bind="if: isRetro()" style="position: relative; height: 200px;">
+				<h1 data-bind="attr: {'data-navigate': '/time-machine/' + retro().year}">charts from <span data-bind="text: retro().year"></span></h1>
+				<div class="v2-song-strip-back"></div>
+				<div class="v2-song-strip-forward"></div>
+				<div class="v2-song-strip" data-bind="attr: {'data-represents': '/time-machine/' + retro().year}">
+					<div data-bind="foreach: retro().charts">
+						<!-- ko component: {
+							name: 'v2-song-box',
+							params: {song: $data}
+						} -->
+						<!-- /ko -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endraw %}

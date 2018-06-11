@@ -1,0 +1,24 @@
+<div class="coverstack nomargin">
+	<div class="covers">
+		{% for image in coverstack %}<img src="{{image}}" border="0">{% endfor %}
+	</div>
+</div>
+<h1 class="oncoverstack">Songs from reddit comments</h1>
+<div class="playlistdescription coverstack-description">
+	<p class="playlist-info">
+	  {% if playlist.trackcount %}
+	  	Automated playlist -
+		<span class="playlist-trackcount">{{playlist.trackcount}}</span> <span class="playlist-plural-singular-tracks">{% if playlist.trackcount == 1 %}track{% else %}tracks{% endif %}</span> - <span data-duration="{{playlist.rawduration}}" class="playlist-duration">{{playlist.duration}}</span>
+	  {% else %}
+		<span class="playlist-trackcount">0</span> <span class="playlist-plural-singular-track">tracks</span> - <span data-duration="0" class="playlist-duration">0 minutes</span>
+	  {% endif %}
+	</p>
+	<button class="play-all-songs">
+		<img class="list-header-play-icon svg-play-black" src="/api/i/pixel"><span>Play all</span>
+	</button>
+</div>
+<div class="extendedtable">
+	<div class="album-tracks">
+		{% include templates.tracklist %}
+	</div>
+</div>

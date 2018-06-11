@@ -1,0 +1,19 @@
+<div class="context-tip playlist-context-tip">
+	<h1><a data-navigate="{{playlist.url}}">{{playlist.name}}</a></h1>
+	<h2>{{playlist.tracks.length}} tracks</h2>
+</div>
+<div class="context-options">
+	<a data-navigate="{{playlist.url}}">
+		<div>Go to playlist</div>
+	</a>
+	{% if owns %}
+	<div data-id="{{playlist.url}}" class="rename-playlist-button" data-name="{{playlist.name}}">Rename playlist</div>
+	<div data-id="{{playlist.url}}" class="delete-playlist-button">Delete playlist</div>
+
+	{% endif %}
+</div>
+{% if !owns %}
+	<div class="footnote">
+		You don't own this playlist
+	</div>
+{% endif %}

@@ -1,0 +1,225 @@
+{% if artist.freebase %}
+	<img src="https://www.googleapis.com/freebase/v1/image{{artist.freebase.image}}?maxwidth=298" onload="$(this).removeClass('image-op0')" class="image-op0">
+	{% if artist.freebase.description %}
+		<p>{{artist.freebase.description}}</p>
+	{% endif%}
+	<h3>Background info</h3>
+	{% if artist.freebase.alias %}
+		<div class="freebase-info-wrapper">
+			<h4>Aliases</h4>
+			<div class="freebase-info">
+				{% for alias in artist.freebase.alias %}
+					{{alias}}<br>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif%}
+	{% if artist.freebase.official_website %}
+		<div class="freebase-info-wrapper">
+			<h4>Website</h4>
+			<div class="freebase-info">
+				{% for website in artist.freebase.official_website %}
+					<a href="{{website}}" target="_blank">{{website}}</a><br>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+	{% if artist.freebase.gender %}
+	<h3>About {% if artist.freebase.gender == 'Male' %}him{% else %}her{% endif %}</h3>
+	{% endif %}
+	{% if artist.freebase.date_of_birth || artist.freebase.place_of_birth %}
+		<div class="freebase-info-wrapper">
+			<h4>Birth</h4>
+			<div class="freebase-info">
+				{{artist.freebase.date_of_birth}}<br>
+				{{artist.freebase.place_of_birth}}
+			</div>
+		</div>
+	{% endif %}
+	{% if artist.freebase.date_of_death || artist.freebase.place_of_death %}
+		<div class="freebase-info-wrapper">
+			<h4>Death</h4>
+			<div class="freebase-info">
+				{{artist.freebase.date_of_death}}<br>
+				{{artist.freebase.place_of_death}}
+			</div>
+		</div>
+	{% endif %}
+	{% if artist.freebase.date_of_burial || artist.freebase.place_of_burial %}
+		<div class="freebase-info-wrapper">
+			<h4>Burial</h4>
+			<div class="freebase-info">
+				{{artist.freebase.date_of_burial}}<br>
+				{{artist.freebase.place_of_burial}}
+			</div>
+		</div>
+	{% endif %}
+	{% if artist.freebase.nationality %}
+		<div class="freebase-info-wrapper">
+			<h4>Nationality</h4>
+			<div class="freebase-info">
+				{{artist.freebase.nationality}}
+			</div>
+		</div>
+	{% endif %}
+	{% if artist.freebase.languages %}
+		<div class="freebase-info-wrapper">
+			<h4>Language</h4>
+			<div class="freebase-info">
+				{{artist.freebase.languages}}
+			</div>
+		</div>
+	{% endif %}
+	{% if artist.freebase.ethnicity %}
+		<div class="freebase-info-wrapper">
+			<h4>Ethnicity</h4>
+			<div class="freebase-info">
+				{{artist.freebase.ethnicity}}
+			</div>
+		</div>
+	{% endif %}
+	{% if artist.freebase.height_meters %}
+		<div class="freebase-info-wrapper">
+			<h4>Height</h4>
+			<div class="freebase-info">
+				{{artist.freebase.height_meters}}m
+			</div>
+		</div>
+	{% endif %}
+	{% if artist.freebase.employment_history %}
+		<div class="freebase-info-wrapper">
+			<h4>Employment history</h4>
+			<div class="freebase-info">
+				{% for company in artist.freebase.employment_history %}
+					{{company}}<br>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+	{% if artist.freebase.parents %}
+		<div class="freebase-info-wrapper">
+			<h4>Parents</h4>
+			<div class="freebase-info">
+				{% for parent in artist.freebase.parents %}
+					{{parent}}<br>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+	{% if artist.freebase.member %}
+	<h3>Members</h3>
+		{% for member in artist.freebase.member %}
+		<div class="freebase-info-wrapper">
+			<h4>{{member.name}}</h4>
+			<div class="freebase-info">
+				{% for role in member.role %}
+					{{role}}<br>
+				{% endfor %}
+			</div>
+		</div>
+		{% endfor %}
+	{% endif %}
+	<h3>Music</h3>
+	{% if artist.freebase.origin %}
+		<div class="freebase-info-wrapper">
+			<h4>Origin</h4>
+			<div class="freebase-info">
+				{{artist.freebase.origin}}
+			</div>
+		</div>
+	{% endif %}
+	{% if artist.freebase.genre %}
+		<div class="freebase-info-wrapper">
+			<h4>Genres</h4>
+			<div class="freebase-info">
+				{% for genre in artist.freebase.genre %}
+					{{genre}}<br>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+	{% if artist.freebase.label %}
+		<div class="freebase-info-wrapper">
+			<h4>Labels</h4>
+			<div class="freebase-info">
+				{% for label in artist.freebase.label %}
+					{{label}}<br>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+	{% if artist.freebase.instruments_played %}
+		<div class="freebase-info-wrapper">
+			<h4>Instruments</h4>
+			<div class="freebase-info">
+				{% for instruments_played in artist.freebase.instruments_played %}
+					{{instruments_played}}<br>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+	{% if artist.freebase.active_start || artist.freebase.active_end %}
+		<div class="freebase-info-wrapper">
+			<h4>Active years</h4>
+			<div class="freebase-info">
+				{{artist.freebase.active_start}}-{{artist.freebase.active_end}}
+			</div>
+		</div>
+	{% endif %}
+	{% if artist.freebase.influenced_by %}
+		<div class="freebase-info-wrapper">
+			<h4>Influences</h4>
+			<div class="freebase-info">
+				{% for influence in artist.freebase.influenced_by %}
+					{{influence}}<br>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+	{% if artist.freebase.appears_in_ranked_lists || artist.freebase.awards_won %}
+	<h3>Awards</h3>
+	{% endif %}
+	{% if artist.freebase.awards_won %}
+		{% for award in artist.freebase.awards_won %}
+		<div class="freebase-info-wrapper">
+			<h4>{{award.award}}</h4>
+			<div class="freebase-info">
+				Won {{award.year}}
+			</div>
+		</div>
+		{% endfor %}
+	{% endif %}
+	{% if artist.freebase.awards_won %}
+		{% for ranking in artist.freebase.appears_in_ranked_lists %}
+		<div class="freebase-info-wrapper">
+			<h4>{{ranking.list}}</h4>
+			<div class="freebase-info">
+				Ranked #{{ranking.rank}} {% if ranking.year %} in {{ranking.year}} {%  endif%}
+			</div>
+		</div>
+		{% endfor %}
+	{% endif %}
+	{% if artist.freebase.film %}
+		<h3>Films</h3>
+		{% for film in artist.freebase.film %}
+		<div class="freebase-info-wrapper">
+			<h4>{{film.film}}</h4>
+			<div class="freebase-info">
+				{% if film.role %} {{film.role}} <br>{% endif %}
+				{% if film.type %} {{film.type}} <br>{% endif %}
+			</div>
+		</div>
+		{% endfor %}
+	{% endif %}
+	{% if artist.freebase.substance_abuse_problems %}
+		<h3>Other</h3>
+		<div class="freebase-info-wrapper">
+			<h4>Substance abuse problems</h4>
+			<div class="freebase-info">
+				{% for drug in artist.freebase.substance_abuse_problems %}
+					{{drug}} <br>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+{% endif %}

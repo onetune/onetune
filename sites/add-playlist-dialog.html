@@ -1,0 +1,7 @@
+{% if playlists.length != 0 %}
+	{% for playlist in playlists %}
+		<div data-url="{{playlist.url}}" data-songid="{{songid}}" class="{% if !playlist.inpl %} add-song-to-playlist-button not-in-playlist {% else %} remove-song-from-playlist-button in-playlist {% endif %}">{{playlist.name}}</div>
+	{% endfor %}
+{% else %}
+		<span class="no-playlists-message">No playlists</span>
+{% endif %}

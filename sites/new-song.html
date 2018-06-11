@@ -1,0 +1,66 @@
+{% raw %}
+	<div data-bind="if: song" class="v2-song">
+		<div class="song-page-full" data-bind="attr: {'data-represents': '/song/' + song().id}">
+			<div data-bind="css: 'song-page-container ' + isYouTubeClass()">
+				<div class="coverstack header-onetune">
+					<div class="header-background" data-bind="style: {'background-image': 'url(' + headerimage() + ')'}"></div>
+					<h1 data-bind="text: song().name"></h1>
+					<p data-bind="text: song().artist"></p>
+				</div>
+			</div>
+			<div class="v2-song-page-table">
+				<div class="v2-song-page-strip">
+					<div class="v2-song-page-strip-half v2-song-page-full-text v2-song-page-add-library" data-bind="css: isInLibrary() ? 'in-library' : 'not-in-library', click: toggleLibrary">
+						<p>Save it</p>
+					<!-- ko if: isInLibrary() -->
+						<img src="/api/i/pixel" class="svg-heart-red" style="background-size: 26px 26px; margin-right: 10px;" height="26" width="26"><span>In library</span>
+					<!-- /ko -->
+					<!-- ko ifnot: isInLibrary() -->
+						<img src="/api/i/pixel" class="svg-heart-empty" style="background-size: 26px 26px; margin-right: 10px;" height="26" width="26"><span>Add to library</span>
+					<!-- /ko -->
+					</div><div class="v2-song-page-strip-half v2-song-page-full-text v2-song-page-playlists" style="background: #c0392b" >
+						<span>Add to a playlist</span>
+						<div class="subtitle" data-bind="text: playlistsLabel()"></div>
+					</div>
+				</div>
+			</div>
+			<div class="v2-playlist-adder">
+				<!-- ko if: playlists().length == 0 -->
+					<div class="no-playlists">You have no playlists.</div>
+				<!-- /ko -->
+				<!-- ko foreach: playlists-->
+					<!-- ko if: $parent.isPlaylistOwner($data.url) -->
+					<div class="v2-playlist-add-fragment"
+						data-bind="
+							css: {
+								'v2-in-playlist': $parent.isInPlaylist($data.url)
+							},
+							click: $parent.togglePlaylist.bind($parent, $data.url)
+						">
+						<img src="/api/svg/playlist-white" alt="">
+						<span data-bind="text: $data.name"></span>
+					</div>
+					<!-- /ko -->
+				<!-- /ko -->
+			</div>
+			<div class="v2-song-page-table">
+				<div class="v2-song-page-strip" style="background: white">
+					<div class="v2-song-page-strip-half v2-song-page-full-text" style="background: rgba(205,32,31,0.8)">
+						<p>Explore it</p>
+						<span>See lyrics</span>
+					</div><div class="v2-song-page-strip-half v2-song-page-full-text" style="background: #cd201f">
+						<span>Watch on YouTube</span>
+					</div>
+				</div>
+				<div class="v2-song-page-strip">
+					<div class="v2-song-page-strip-half v2-song-page-full-text" style="background: #55acee">
+						<p>Share it</p>
+						<span>Twitter</span>
+					</div><div class="v2-song-page-strip-half v2-song-page-full-text" style="background: #3B5998">
+						<span>Facebook</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endraw %}

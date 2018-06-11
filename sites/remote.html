@@ -1,0 +1,5 @@
+<h1>Remote</h1>
+<p>Use your phone to control OneTune. Got to <a href="https://onetune.fm/rmt">www.onetune.fm/rmt</a> and enter the code {{code}}</p>
+<script>
+	socket.emit('/pairing/register', { code: '{{code}}'});
+</script>

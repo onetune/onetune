@@ -1,0 +1,32 @@
+<div class="rep-wrapper" data-represents="/r/{{subreddit}}">
+	<div class="coverstack nomargin">
+		<div class="covers">
+			{% for image in coverstack %}<img onload="$(this).addClass('coverstack-cover-loaded')" src="{{image}}" border="0">{% endfor %}
+			<div class="coverstack-overlay"></div>
+		</div>
+		<div class="playlistdescription coverstack-description">
+			<h1>{{subreddit}}</h1>
+			{% if hostname %}
+				<p>served from {{hostname}}</p>
+			{% endif %}
+			<div class="headeroptions">
+				<button class="play-all-songs-in-order">
+					<span>Play</span>
+				</button>
+			</div>
+			<div class="headeroptions">
+				<button class="play-all-songs">
+					<span>Shuffle</span>
+				</button>
+			</div>
+			<div class="headeroptions">
+				<button data-navigate='/genres'><span>Other genres</span></button>
+			</div>
+		</div>
+	</div>
+	<div class="extendedtable">
+		<div class="album-tracks">
+			{% include templates.tracklist %}
+		</div>
+	</div>
+</div>

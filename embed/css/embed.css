@@ -1,0 +1,227 @@
+* {
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+body {
+  margin: 0;
+  font-family: 'Open Sans';
+}
+header,
+#onetune-player {
+  background: #F84A4A;
+  color: white;
+  padding-left: 20px;
+}
+header {
+  height: 58px;
+}
+header #logo {
+  font-size: 1.2em;
+  top: 15px;
+  position: absolute;
+}
+p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+#onetune-player #controls {
+  position: absolute;
+  top: 12px;
+  right: 20px;
+}
+#onetune-player #controls #previous,
+#onetune-player #controls #next,
+#onetune-player #controls #playpause {
+  cursor: pointer;
+  outline: none;
+}
+#onetune-player #controls #previous {
+  background: url(/embed/public/back.svg);
+  vertical-align: middle;
+  margin-right: 10px;
+}
+#onetune-player #controls #next {
+  background: url(/embed/public/forward.svg);
+  vertical-align: middle;
+}
+#onetune-player #controls #previous,
+#onetune-player #controls #next {
+  width: 35px;
+  height: 35px;
+  background-size: 35px 35px;
+  border: none;
+}
+#onetune-player #controls #playpause {
+  background: url(/embed/public/play.svg);
+  border: none;
+  width: 25px;
+  height: 25px;
+  background-size: 25px 25px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+#onetune-player #controls #playpause.hearable {
+  background-image: url(/embed/public/pause.svg);
+}
+#onetune-player .player-cover {
+  height: 100px;
+  width: 100px;
+}
+#onetune-player .player-name {
+  position: absolute;
+  top: 58px;
+  left: 140px;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+#onetune-player .player-artist {
+  position: absolute;
+  top: 82px;
+  left: 140px;
+  font-size: 0.75em;
+}
+#onetune-player #playerbar-left {
+  position: absolute;
+  left: 140px;
+  top: 129px;
+  font-size: 0.75em;
+}
+#onetune-player #playerbar-right {
+  position: absolute;
+  right: 20px;
+  top: 129px;
+  font-size: 0.75em;
+}
+#onetune-player #playerbar {
+  height: 9px;
+  left: 140px;
+  top: 149px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  width: 100%;
+  width: calc(100% - 160px);
+  border-radius: 9px;
+}
+#onetune-player #playerbarprogress {
+  border-radius: 9px;
+  background: white;
+  height: 100%;
+}
+#onetune-player #playlistinfo {
+  margin-top: 8px;
+  font-size: 0.8em;
+}
+#onetune-player #playlistinfo a {
+  opacity: 0.8;
+}
+#onetune-player #showhidevideo {
+  border: 1px solid white;
+  background: transparent;
+  font-family: inherit;
+  color: inherit;
+  font-size: 0.8em;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+#onetune-player #showhidevideo:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+#ytplayer {
+  opacity: 0;
+  position: absolute;
+  z-index: -3;
+  top: -3000px;
+}
+#ytplayer.player-visible {
+  top: 58px;
+  opacity: 1;
+  z-index: 1;
+  height: 100px;
+  width: 100px;
+  left: 20px;
+}
+#tracklist {
+  margin-top: 7px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+}
+#tracklist .song {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid white;
+  font-size: 0.8em;
+}
+#tracklist .song:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+#tracklist .song:hover .track-play-icon {
+  display: block;
+}
+#tracklist .song:hover .track-index {
+  opacity: 0;
+  pointer-events: none;
+}
+#tracklist .song:first-child {
+  border-top: 1px solid white;
+}
+#tracklist .song .track-index,
+#tracklist .song .track-title,
+#tracklist .song .track-artist,
+#tracklist .song .track-duration {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: default;
+}
+#tracklist .song .track-play-icon {
+  background: blue;
+  background: url(/embed/public/play.svg);
+  background-size: 10px 10px;
+  background-repeat: no-repeat;
+  background-position: 5px 4px;
+  border: 1px solid white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  display: none;
+  margin-left: 5px;
+  cursor: pointer;
+}
+#tracklist .song .track-play-icon.hearable {
+  background-image: url(/embed/public/pause.svg);
+  background-position: 4px 4px;
+}
+#tracklist .song .track-index {
+  width: 30px;
+  text-align: center;
+}
+#tracklist .song .track-title {
+  width: 45%;
+  width: calc(50% - 50px);
+  left: 50px;
+  position: absolute;
+  padding-right: 20px;
+}
+#tracklist .song .track-artist {
+  left: 50%;
+  width: calc(50% - 60px);
+  position: absolute;
+}
+#tracklist .song .track-duration {
+  right: 20px;
+  width: 40px;
+  position: absolute;
+}
+#tracklist .song.playing {
+  font-weight: bold;
+  font-style: italic;
+}

@@ -1,0 +1,179 @@
+<html>
+	<head>
+	    <link href='https://fonts.googleapis.com/css?family=Open+Sans:700,600,400' rel='stylesheet' type='text/css' />
+		<title>Welcome Banner</title>
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				font-family: "Open Sans", "sans-serif";
+				font-size: 14px;
+				color: white;
+				text-align: center;
+				width: 100%;
+				margin: 0;
+				overflow-x: hidden;
+			}
+
+			div#main {
+				width: 100%;
+				height: 460px;
+				background-color: #f84a4a;
+				border-radius: 4px;
+				padding: 30px 20px;
+			}
+				h1 {
+					font-size: 40px;
+					font-weight: normal;
+					margin: 0px;
+				}
+					span.bold {font-weight: bold;}
+				p.subtitle {
+					margin: 15px auto 35px auto;
+					font-size: 18px;
+					color: #f89f9f;
+				}
+				div#item-container {
+					width: 100%;
+					height: 240px;
+					margin: 0px auto;
+					display: flex;
+					display: -ms-flex;
+					flex-direction: row;
+					-ms-flex-direction: row;
+					flex-wrap: nowrap;
+					-ms-flex-wrap: nowrap;
+					justify-content: center;
+					-ms-flex-pack: center;
+				}
+					div.flex-item {
+						min-width: 240px;
+						max-width: 350px;
+						flex-grow: 1;
+						position: relative;
+					}
+					_:-ms-input-placeholder, :root div.flex-item {
+						max-width: auto;
+					}
+						div.flex-item p {
+							width: 230px;
+							margin: 10px auto;
+							font-size: 20px;
+						}
+						div.flex-item p img.icon {
+							margin-bottom: 15px;
+						}
+						div.flex-item .video {
+							position: absolute;
+							top: -45px; right: -470px;
+							padding-left: 80px;
+							display: none;
+							z-index: 99;
+							/*box-shadow: 0px 2px 13px 0px black;*/
+						}
+						div.flex-item .video2 {
+							position: absolute;
+							top: -40px; right: -510px;
+							padding-left: 70px;
+							display: none;
+						}
+						div.flex-item .video3 {
+							position: absolute;
+							top: -40px; left: -545px;
+							padding-right: 70px;
+							display: none;
+						}
+							div#d3 p img {
+								margin: 10px auto 23px auto;
+							}
+					div#d1 {
+						border-right: 1px solid #ff9d9d;
+					}
+					div#d2 {
+						left: 0px;
+						border-right: 1px solid transparent;
+					}
+					div#d3 {
+						border-left: 1px solid #ff9d9d;
+					}
+					.scrolldown {
+						opacity: 0.6;
+						margin-top: 35px;
+					}
+		</style>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+	</head>
+	<body>
+		<div id="main">
+			<h1>The World's Music, in <span class="bold">One</span> Place.</h1>
+			<p class="subtitle">Hover over each section to learn more</p>
+			<div id="item-container">
+				<div class="flex-item" id="d1">
+					<p>
+						<img src="/api/i/world-icon" class="icon" /><br />
+						Stream millions of artists, albums, and songs from hundreds of countries
+					</p>
+					<img src="/api/i/dummyPic0s" class="video" />
+				</div>
+				<div class="flex-item" id="d2">
+					<p>
+						<img src="/api/i/music-icon" class="icon" /><br />
+						Save <span class="bold">any</span> song into your Library, even songs and covers not listed on iTunes or Spotify
+					</p>
+					<img src="/api/i/dummyPic2s" class="video2" />
+				</div>
+				<div class="flex-item" id="d3">
+					<p>
+						<img src="/api/i/crowd-icon" class="icon" /><br />
+						Powered by the community. Fix bad video matches and tag songs with metadata
+					</p>
+					<img src="/api/i/dummyPic3s" class="video3" />
+				</div>
+			</div>
+			<div class="scrolldown">scroll down to play music</div>
+		</div>
+
+		<script>
+		$("#d1").hover(function() {
+			if ($("#d2").css("left") == "0px") { //temp. patch
+				$("#d2, #d3").stop().fadeTo(300,0);
+				$(".video").stop().fadeIn(300);
+			} else { //second section is moving
+				$("#d2").css("left", "0px");
+				$("#d2, #d3").stop().css("opacity", 0);
+				$(".video").stop().show();
+			}
+		}, function() {
+			$("#d2, #d3").stop().fadeTo(300,1);
+			$(".video").stop().fadeOut(300);
+		});
+
+		$("#d2").hover(function() {
+			$("#d2").css("borderRight", "1px solid #ff9d9d");
+			$("#d2").stop().animate({left:"-200px"},300);
+			$("#d1, #d3").stop().fadeTo(300,0);
+			$(".video2").stop().fadeIn(300);
+		}, function() {
+			$("#d2").css("borderRight", "1px solid transparent");
+			$("#d2").stop().animate({left:"0px"},300);
+			$("#d1, #d3").stop().fadeTo(300,1);
+			$(".video2").stop().fadeOut(300);
+		});
+
+		$("#d3").hover(function() {
+			if ($("#d2").css("left") == "0px") {
+				$("#d1, #d2").stop().fadeTo(300,0);
+				$(".video3").stop().fadeIn(300);
+			} else {
+				$("#d2").css("left", "0px");
+				$("#d1, #d2").stop().css("opacity", 0);
+				$(".video3").stop().show();
+			}
+		}, function() {
+			$("#d1, #d2").stop().fadeTo(300,1);
+			$(".video3").stop().fadeOut(300);
+		});
+		</script>
+	</body>
+</html>

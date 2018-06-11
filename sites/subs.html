@@ -1,0 +1,17 @@
+<div class="sub-list-page">
+	<div data-represents="/one">
+		<div class="material-box genre-card">
+			<h2 class="h2-orange">OneTune Communities<span class="beta-label">BETA</span></h2>
+			<p style="font-size: 1.0em">
+				Introducing communities formed around specific genres/areas of music, where anyone can submit, vote, and discuss anything related to that particular topic!
+				<br><br>
+				Coming soon - create your own Communities on OneTune!
+			</p>
+		</div>
+		<div class="sub-list-wrapper">
+			{% for sub in subs %}
+				{% include './subtune-header.html' with sub %}
+			{% endfor %}
+		</div>
+	</div>
+</div>

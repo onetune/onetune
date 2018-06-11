@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" width="100.0px" height="100px" viewBox="0 0 512 512" version="1.1">
+    <title>Slice 1</title>
+    <description>Created with Sketch (http://www.bohemiancoding.com/sketch)</description>
+    <defs/>
+    <g id="Page 1" fill="#f84a4a" fill-rule="evenodd">
+        <path d="M128,208 C128,110.797879 206.797879,32 304,32 C401.202121,32 480,110.797879 480,208 C480,305.202121 401.202121,384 304,384 C271.824119,384 241.664874,375.365764 215.712397,360.287603 L96,480 C60.6538843,480 32,451.346224 32,416 L151.712397,296.287603 C136.634236,270.335126 128,240.175881 128,208 Z M416,208 C416,146.144105 365.855895,96 304,96 C242.144105,96 192,146.144105 192,208 C192,269.855895 242.144105,320 304,320 C365.855895,320 416,269.855895 416,208 Z M416,208" id="Search" fill="#f84a4a"/>
+    </g>
+</svg>

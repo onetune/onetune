@@ -1,0 +1,10 @@
+{% if !user %}
+<div>
+	<h1></h1>
+	<div class="please-login">
+		<p>To use the library, you need to login with Facebook.</p>
+		<p>Don't worry, it just takes 2 clicks and we promise we will not do anything evil with your data.</p>
+		<button onclick="window.location = '/auth/facebook'" id="authenticate">Login with Facebook</button>
+	</div>
+</div>
+{% endif %}

@@ -1,0 +1,29 @@
+<div class="{% if name %}subtune-banner-container{% else %} homepage-header{% endif %}">
+	<img src="{{header}}" class="subtune-banner">
+	{% if name %}
+		{% set url = '/one/' + name + '/' %}
+		<div class="subtune-banner-title" data-navigate="{{url}}">{{name}}</div>
+	{% else %}
+		{% set url = '/' %}
+		<div class="homepage-header-text">
+			<h1>OneTune is music streaming powered by <span class="fakebreak">communities, and <strong>you</strong>.</span></h1>
+			<p>Submit and vote on music that you think deserves attention.</p>
+			<p>Join communities centered around music you love.</p>
+		</div>
+	{% endif %}
+	<div class="subtune-banner-wrapper">
+		<nav class="subtune-banner-nav">
+			<div class="subtune-banner-nav-element {% if type == 'home' %}one-header-element-selected{% endif %}" data-navigate="{% if name %}{{url.substr(0,url.length-1)}}{% else %}/{% endif %}">{% if name %}home{% else %}all{% endif %}</div>
+			<div class="subtune-banner-nav-element {% if type == 'songs' %}one-header-element-selected{% endif %}" data-navigate="{{url}}songs">songs</div>
+			<div class="subtune-banner-nav-element {% if type == 'playlists' %}one-header-element-selected{% endif %}" data-navigate="{{url}}playlists">playlists</div>
+			<div class="subtune-banner-nav-element {% if type == 'stories' %}one-header-element-selected{% endif %}" data-navigate="{{url}}stories">discussions</div>
+			<div class="subtune-banner-nav-element {% if type == 'submit' %}one-header-element-selected{% endif %}" data-navigate="{{url}}submit">submit</div>
+		</nav>
+		<nav class="subtune-banner-nav subtune-banner-nav-right">
+			{% if type == 'songs' or type == 'playlists' or type == 'stories' %}
+				<div class="subtune-banner-nav-element {% if ranking == 'top' %}one-header-element-selected{% endif %}" data-navigate="{{url}}{{type}}?ranking=top">top</div>
+				<div class="subtune-banner-nav-element {% if ranking == 'new' %}one-header-element-selected{% endif %}" data-navigate="{{url}}{{type}}?ranking=new">new</div>
+			{% endif %}
+		</nav>
+	</div>
+</div>

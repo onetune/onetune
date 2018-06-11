@@ -1,0 +1,38 @@
+<div class="report">
+	<div class="report-header material-box">
+		<h2 class="h2-orange">Report song</h2>
+		<p>There's only so much an algorithm can guess. Help match the right video for this track!</p>
+	</div>
+	<div class="report-bar">
+		<div class="report-song-box">
+			<img src="{{song.image}}" class="report-song-box-image">
+			<div class="report-song-box-name">{{song.name}}</div>
+			<div class="report-song-box-artist">{{song.artist}}</div>
+		</div>
+		<div class="report-song-input-box">
+			<p>YouTube link for the new video: </p><input type="text" onclick="this.select()" class="report-youtube-input">
+			<button data-submit="{{song.id}}" class="orange-button report-submit">Submit</button>
+			<svg class="report-loading-indicator"  width="17" height="17" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" version="1.1" fill="#f84a4a">
+				  <path d="M 150,0 a 150,150 0 0,1 106.066,256.066 l -35.355,-35.355 a -100,-100 0 0,0 -70.711,-170.711 z" transform="rotate(186.438 150 150)">
+				   	<animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 150 150" to="360 150 150" begin="0s" dur="2s" fill="freeze" repeatCount="indefinite"></animateTransform>
+			 	</path>
+			</svg>
+			<p class="report-feedback"></p>
+		</div>
+	</div>
+	<div class="report-middle">
+		<div class="report-video-list"></div>
+		<div class="report-video-player">
+			<div class="report-preview">
+				<h3>Preview</h3>
+				<p>Click a video on the left to see a video preview</p>
+			</div>
+			<div class="report-youtube"></div>
+		</div>
+	</div>
+	{% autoescape false %}
+	<script>
+		report.showList({{json}});
+	</script>
+	{% endautoescape %}
+</div>

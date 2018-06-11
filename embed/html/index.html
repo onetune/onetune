@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>OneTune</title>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:600,400,300">
+	<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular-route.min.js"></script>
+	<link rel="stylesheet" href="/embed/css">
+</head>
+<body ng-app="OneTuneEmbed">
+	<header>
+		<div id="logo"><a href="https://onetune.fm" target="_blank">one<strong>tune</strong>.fm</a></div>
+	</header>
+	<div id="onetune-player" ng-controller="Player">
+		{% raw %}
+			<img class="player-cover" src="{{current.image}}" alt="" ng-model="current" ng-change="playYT()">
+			<p class="player-name">{{current.name}}</p>
+			<p class="player-artist">{{current.artist}}</p>
+			<div id="controls">
+				<button id="showhidevideo" ng-click="showhidevideo()"><span ng-if="playerShown">Hide video</span><span ng-if="!playerShown">Show video</span></button>
+				<button id="previous" ng-click="previous()"></button>
+				<button id="playpause" ng-click="playpause()" class="player-play-pause" ng-class="{hearable: state == 1}"></button>
+				<button id="next" ng-click="next()"></button>
+			</div>
+			<div id="playerbar-left">{{parseTime(progress)}}</div>
+			<div id="playerbar-right">{{parseTime(duration)}}</div>
+			<div id="playerbar">
+				<div id="playerbarprogress" ng-style="playerProgress"></div>
+			</div>
+			<div id="playlistinfo" ng-if="playlist">
+				Playlist: <a target="_blank" href="{{origin}}{{playlist.url}}">{{playlist.name}}</a> by <a target="_blank" href="{{origin}}/u/{{playlist.username}}">{{playlist.username}}</a> • {{tracks.length}} <ng-pluralize count="tracks.length" when="{'1': 'track', 'other': 'tracks'}"></ng-pluralize>
+			</div>
+			<div id="tracklist">
+				<div class="song" ng-repeat="track in tracks" ng-class="{playing: $index == index}" ng-dblclick="playthis($index)">
+					<div class="track-play-icon" ng-class="{hearable: state == 1 && $index == index}" ng-click="playthisorpause($index)"></div>
+					<div class="track-index">{{$index+1}}</div>
+					<div class="track-title"><a href="{{origin}}/song/{{track.id}}" target="_blank">{{track.name}}</a></div>
+					<div class="track-artist">{{track.artist}}</div>
+					<div class="track-duration">{{parseTime(track.duration)}}</div>
+				</div>
+			</div>
+		{% endraw %}
+	</div>
+	<script>
+		angular.module('OneTuneEmbed', ['ngRoute'])
+			.controller('Player', ['$scope', '$interval', function ($scope, $interval) {
+					{% if song %}
+						$scope.tracks = [{{JSON.stringify(song)}}];
+					{% elseif tracks %}
+						$scope.tracks = {{JSON.stringify(tracks)}};
+						$scope.playlist = {{JSON.stringify(playlist)}};
+					{% endif %}
+						$scope.origin = window.location.origin;
+						$scope.index = 0;
+						$scope.current = $scope.tracks[$scope.index];
+						$scope.parseTime = function(number) {
+							var divide = (number > 5000) ? 1000 : 1
+							var fullseconds = Math.round(number / divide),
+								minutes = Math.floor(fullseconds/60),
+								seconds = fullseconds-(minutes*60)
+							if (seconds < 10) {
+								seconds = "0" + seconds;
+							}
+							return minutes+":"+seconds;
+						}
+						$scope.next = function() {
+							$scope.index++;
+							if ($scope.index == $scope.tracks.length) {
+								$scope.index = 0;
+							}
+							$scope.current = $scope.tracks[$scope.index];
+						}
+						$scope.previous = function() {
+							$scope.index--;
+							if ($scope.index < 0) {
+								$scope.index = $scope.tracks.length - 1;
+							}
+							$scope.current = $scope.tracks[$scope.index];
+						}
+						$scope.playpause = function() {
+							var state = window.ytplayer.getPlayerState();
+							if (state == 1) {
+								window.ytplayer.pauseVideo();
+							}
+							else {
+								window.ytplayer.playVideo()
+							}
+						}
+						$scope.playthis = function(index) {
+							if ($scope.index == index) {
+								var p = function() {
+									if (window.ytplayer && window.ytplayer.playVideo) {
+										window.ytplayer.playVideo();
+									}
+									else {
+										setTimeout(p, 200);
+									}
+								}
+								p();
+								return;
+							}
+							$scope.index = index;
+							$scope.current = $scope.tracks[$scope.index];
+						}
+						$scope.playthisorpause = function(index) {
+							if ($scope.index == index) {
+								$scope.playpause();
+							}
+							else {
+								$scope.playthis(index);
+							}
+						}
+						$scope.playerShown = false;
+						$scope.showhidevideo = function() {
+							$scope.playerShown = !$scope.playerShown;
+							document.getElementById('ytplayer').classList.toggle('player-visible');
+						}
+						$scope.first = true;
+						$scope.$watch('current', function() {
+							if ($scope.first) {
+								$scope.first = false;
+								var preload = function () {
+									if (window.ytplayer && window.ytplayer.cueVideoById) {
+										window.ytplayer.cueVideoById($scope.current.ytid)
+									}
+									else {
+										setTimeout(preload, 500);
+									}
+								}
+								return;
+							}
+							var loadVideo = function () {
+								if (window.ytplayer && window.ytplayer.loadVideoById) {
+									window.ytplayer.loadVideoById($scope.current.ytid)
+								}
+								else {
+									setTimeout(loadVideo, 500);
+								}
+							}
+							loadVideo();
+						});
+						$scope.playerProgress = {width: '100%'};
+						$scope.progress = 0;
+						$scope.duration = 0;
+						$interval(function() {
+							if (window.ytplayer.getCurrentTime) {
+								$scope.progress = window.ytplayer.getCurrentTime();
+								$scope.playerProgress.width = ($scope.progress/$scope.duration)*100 + '%'
+							}
+						}, 300);
+						$interval(function() {
+							if (window.ytplayer.getDuration) {
+								$scope.duration = window.ytplayer.getDuration();
+							}
+						}, 300);
+						stateChange = function(code) {
+							$scope.state = code.data
+						}
+			}]);
+	</script>
+	<div id="player"></div>
+	<div id="ytplayer"></div>
+	<div id="ytapiplayer"></div>
+	<script>
+		var player;
+		var youtubeinit = function() {
+			var tag = document.createElement('script');
+			tag.src = "https://www.youtube.com/iframe_api";
+			var firstScriptTag = document.getElementsByTagName('script')[0];
+			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+		}
+		var onYouTubePlayerReady = function(event) {
+			window.ytplayer = event.target;
+		}
+		var videoEnded  = function() {
+			console.log('video ended');
+		}
+		var errorOccured = function(code) {
+			console.log('error occured', code);
+		}
+		var onYouTubeIframeAPIReady = function() {
+			{% if song %}
+				var toplay = '{{song.ytid}}'
+			{% elseif tracks %}
+				var toplay = '{{tracks[0].ytid}}'
+			{% endif %}
+			new YT.Player('ytplayer', {
+		    	height: '390',
+		    	width: '640',
+		    	videoId: toplay,
+		    	playerVars: {
+		    		html5: '1',
+		    		controls: '0',
+		    		iv_load_policy: '3'
+		    	},
+		    	events: {
+		    	  'onReady': onYouTubePlayerReady,
+		    	  'onStateChange': stateChange,
+		    	  'onEnded': videoEnded,
+		    	  'onError': errorOccured
+		    	}
+		 	});
+		}
+		youtubeinit();
+	</script>
+</body>
+</html>

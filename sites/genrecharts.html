@@ -1,0 +1,35 @@
+<div class="rep-wrapper" data-represents="/one/{{sub.name}}/charts">
+	<div class="coverstack nomargin">
+		<div class="covers">
+			{% for image in coverstack %}<img onload="$(this).addClass('coverstack-cover-loaded')" src="{{image}}" border="0">{% endfor %}
+			<div class="coverstack-overlay"></div>
+		</div>
+		<div class="playlistdescription coverstack-description">
+			<h1>{{sub.name}} - iTunes charts</h1>
+			<div class="headeroptions">
+				<button class="play-all-songs-in-order">
+					<span>Play</span>
+				</button>
+			</div>
+			<div class="headeroptions">
+				<button class="play-all-songs">
+					<span>Shuffle</span>
+				</button>
+			</div>
+			<div class="headeroptions">
+				<button data-navigate='/charts'><span>All-genre charts</span></button>
+			</div>
+			<div class="headeroptions">
+				<button data-navigate='/one/{{sub.name}}'><span>Subtune</span></button>
+			</div>
+			<div class="headeroptions">
+				<button data-navigate='/time-machine/2015'><span>Time machine</span></button>
+			</div>
+		</div>
+	</div>
+	<div class="extendedtable">
+		<div class="album-tracks">
+			{% include templates.tracklist %}
+		</div>
+	</div>
+</div>

@@ -1,0 +1,9 @@
+<div class="v2-song-box song"
+	data-bind="song: $data.song, css: isInLibrary($data.song.id), attr: {'data-nowplaying': isNowPlaying(song.id), 'data-hearable': isHearable($data.song.id)}">
+	<img data-bind="attr: {src: formatImage($data.song.image) }">
+	<div class="v2-song-black-overlay">
+		<div class="v2-song-box-nowplaying" data-bind="click: handleClick"></div>
+		<div class="v2-song-box-label v2-song-box-title" data-bind="text: $data.song.formattedTitle, attr: {'data-navigate': '/song/' + $data.song.id}"></div>
+		<div class="v2-song-box-label v2-song-box-artist" data-bind="text: $data.song.artist, attr: {'data-navigate': '/artist/' + $data.song.artistid}"></div>
+	</div>
+</div>

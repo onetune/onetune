@@ -1,0 +1,22 @@
+<div class="user-page">
+	<div class="material-box">
+		{% if user.first %}
+			<img class="user-page-image transition-up" src="https://graph.facebook.com/{{user.id}}/picture?type=square"></img>
+		{% endif %}
+		<h2 class="h2-orange transition-up">
+			{% if user.first %}
+			{{user.first}} {{user.last}}
+			{% else %}
+			{{user.username}}
+			{% endif %}
+		</h2>
+		<p style="margin-top: 20px;" class="transition-up">{{playlists.length}} public playlists</p>
+	</div>
+	{% for playlist in playlists %}
+		<div class="material-box">
+			<h2>{{playlist.name}}</h2>
+			<p><a data-navigate="{{playlist.url}}">Go to playlist</a></p>
+			<p>{{playlist.tracks.length}} tracks</p>
+		</div>
+	{% endfor %}
+</div>

@@ -1,0 +1,39 @@
+<div class="register-dialog select-username-container">
+	<table>
+		<tr>
+			<td  class="transition-up facebook-signin-card"colspan="2">
+				<div class="material-box" >
+					<h2>Sign in with Facebook</h2>
+					<p>The easiest way to use OneTune.</p>
+					<a href="/auth/facebook"><div class="orange-button">Login with Facebook</div></a>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td class="transition-up">
+				<div class="material-box">
+					<h2>Login</h2>
+					<form action="/api/login" class="login-form">
+						<input type="text" placeholder="Username"class="register-input login-username">
+						<input type="password" placeholder="Password" class="register-input login-password"> <br>
+						<p class="login-fail-indicator"></p>
+						<input type="submit" class="login-submit" value="Login"></input>
+					</form>
+				</div>
+			</td>
+			<td class="transition-up">
+				<div class="material-box">
+					<h2>Create a free account</h2>
+					<form action="/api/register" class="register-form">
+						<input type="text" placeholder="E-Mail" autocomplete="off" class="register-input register-email">
+						<input type="text" placeholder="Username" autocomplete="off" id="register-username-input" class="register-input">
+						<input type="password" placeholder="Password" autocomplete="off" class="register-input register-password">
+						<br>
+						<p class="username-availability-indicator"></p>
+						<input type="submit" class="username-disable" value="Register">
+					</form>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>

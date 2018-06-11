@@ -1,0 +1,46 @@
+<div class="home-container">
+	{% if firsttime %}
+		<div class="closebanner" onclick="$('iframe').remove(); $(this).remove()">Close</div>
+		<iframe src="/api/banner2" height="350" frameborder="0"></iframe>
+	{% endif %}
+	<div class="home-body">
+			<div class="box-wrapper transition-rotate" data-represents="/library">
+				<h3>New in your library<br><span class="main-link" data-navigate="/library">Go to library</span></h3>
+						{% if user %}
+							{% if library.length == 0 %}
+								<div class="home-login">
+									You have no tracks in your library. <br>
+									Right click on a track and choose "Add to library."
+								</div>
+							{% else %}
+								{% for reddit in library %}
+									{% include templates.redditbox %}
+								{% endfor %}
+							{% endif %}
+						{% else %}
+							<div class="home-login">You need to login to save tracks to your library. <br>
+							<button class='login-button' data-navigate="/register" class="facebook">Login</button>
+							</div>
+
+						{% endif %}
+			</div>
+			<div class="box-wrapper transition-rotate" data-represents="/charts">
+				<h3>iTunes Charts<br><span class="main-link" data-navigate="/charts">Go to charts</span></h3>
+				{% for reddit in charts %}
+					{% include templates.redditbox %}
+				{% endfor %}
+			</div>
+			<div class="main-retro box-wrapper transition-rotate" data-represents="/time-machine/{{randomyear}}">
+				<h3>Popular in... {{randomyear}}<br><span class="main-link" data-navigate="/time-machine/{{randomyear}}">Use time machine</span></h3>
+				{% for reddit in topanno %}
+					{% include templates.redditbox %}
+				{% endfor %}
+			</div>
+			<div class="reddit-feature box-wrapper transition-rotate" data-represents="/genres">
+				<h3>What's hot on Reddit?<br><span class="main-link" data-navigate="/genres">See genres</span></h3>
+				{% for reddit in redditsongs %}
+					{% include templates.redditbox %}
+				{% endfor %}
+			</div>
+	</div>
+</div>

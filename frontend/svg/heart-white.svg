@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" id="Layer_1" x="0px" y="0px" width="104px" height="95px" viewBox="0 0 104 95" enable-background="new 0 0 100 95" xml:space="preserve">
+
+
+    <defs>
+  <filter id="inner-shadow">
+
+    <!-- Shadow Offset -->
+    <feOffset dx="0" dy="0"/>
+
+    <!-- Shadow Blur -->
+    <feGaussianBlur stdDeviation="8" result="offset-blur"/>
+
+    <!-- Invert the drop shadow
+         to create an inner shadow -->
+    <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse"/>
+
+    <!-- Color & Opacity -->
+    <feFlood xmlns="http://www.w3.org/2000/svg" flood-color="black" flood-opacity="0.1" result="color"/>
+
+    <!-- Clip color inside shadow -->
+    <feComposite operator="in" in="color" in2="inverse" result="shadow"/>
+
+    <!-- Put shadow over original object -->
+    <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
+  </filter>
+</defs>
+
+
+
+
+
+    <path xmlns="http://www.w3.org/2000/svg" stroke-width="3" stroke="#fff" fill="#f84a4a" d="M51.999 93.46c3.944 -3.943 26.458 -26.47 40.533 -40.543c12.61 -12.611 12.341 -30.992 0.876 -42.395C81.943 -0.8839999999999999 63.404 -0.8340000000000001 51.999 10.632C40.595 -0.8340000000000001 22.056 -0.8839999999999999 10.591 10.522C-0.8740000000000001 21.925 -1.142 40.306 11.467 52.917C25.541 66.99 48.058 89.517 51.999 93.46z" style="box-shadow: 0 0 3px black" filter="url(#inner-shadow)"/> </svg>

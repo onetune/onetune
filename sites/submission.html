@@ -1,0 +1,46 @@
+			{% if post.entity == 'song' %}
+			<div class="post-in-list post-in-list-song song{% if post.info.ytid %} recognized{% else %} not-recognized{% endif %}{% if post.info.inlib %} in-library {% else %} not-in-library{% endif %}" data-album="{{post.info.album}}" data-name="{{post.info.name}}" data-index="{{loop.index}}" data-duration="{{post.info.duration}}" data-albumid="{{post.info.albumid}}" data-artist="{{post.info.artist}}" data-artistid="{{post.info.artistid}}" data-image="{{post.info.image}}" data-id="{{post.info.id}}" data-explicit="{{post.info.explicit}}" data-genre="{{post.info.genre}}" data-numberinalbum="{{post.info.numberinalbum}}" data-cdinalbum="{{post.info.cdinalbum}}" data-tracks="{{post.info.tracks}}" data-cdcount="{{post.info.cdcount}}" data-preview="{{post.info.preview}}" data-release="{{post.info.release}}" {% if post.info.ytid %} data-ytid="{{post.info.ytid}}" {% endif %}>
+				<div class="post-in-list-title" data-navigate="/one/{{post.sub}}/{{post.slug}}/{{post.url}}">{{post.info.name}} <span>{{post.info.artist}}</span></div>
+				<img src="{{post.info.image}}" alt="" class="post-in-list-image">
+					<div class="visual-play-button recognized findandplay" data-id="{{post.info.id}}"><div class="play-icon"></div></div>
+				<p class="submission-bar">submitted {{post.timestamp}} by {{post.user}} to <a data-navigate="/one/{{sub}}">{{post.sub}}</a></p>
+				<p class="post-action-bar"><a class="findandplay" data-id="{{post.info.id}}">Play</a><a data-navigate="/one/{{post.sub}}/{{post.slug}}/{{post.url}}">{{post.comments}} {% if post.comments == 1 %}comment{% else %}comments{% endif %}</a>{% if post.deletable %} <a class="delete-post" data-id="{{post._id.toString()}}">Delete</a> {% endif %}<a data-navigate="/song/{{post.info.id}}">Song page</a></p>
+				<div class="vote-module" data-vote="{{post.vote}}">
+					<div data-sub="{{post.sub}}" data-slug="{{post.slug}}" class="upvote-post {% if post.upvoted %} upvoted {% endif %}"><img src="/api/i/pixel" class="svg-upvote-black"></div>
+					<div class="upvote-count">{{post.vote_count}}</div>
+					<div data-sub="{{post.sub}}" data-slug="{{post.slug}}" class="downvote-post {% if post.downvoted %} downvoted {% endif %}"><img src="/api/i/pixel" class="svg-downvote-black"></div>
+				</div>
+			</div>
+			{% endif %}
+			{% if post.entity == 'playlist' %}
+			<div class="post-in-list post-in-list-playlist">
+				<div class="post-in-list-title" data-navigate="{{post.playlist}}">{{post.title}}</div>
+				<div class="twobytwocovers">
+					{% for thumbnail in post.thumbnails %}
+						<img src="{{thumbnail}}">
+					{% endfor %}
+				</div>
+				<p class="submission-bar">submitted {{post.timestamp}} by {{post.user}} to <a data-navigate="/one/{{sub}}">{{post.sub}}</a></p>
+				<p class="post-action-bar"><a data-navigate="{{post.playlist}}">Go to playlist</a><a data-navigate="/one/{{post.sub}}/{{post.slug}}/{{post.url}}">{{post.comments}} {% if post.comments == 1 %}comment{% else %}comments{% endif %}</a>{% if post.deletable %} <a class="delete-post" data-id="{{post._id.toString()}}">Delete</a> {% endif %}</p>
+				<div class="vote-module" data-vote="{{post.vote}}">
+					<div data-sub="{{post.sub}}" data-slug="{{post.slug}}" class="upvote-post {% if post.upvoted %} upvoted {% endif %}"><img src="/api/i/pixel" class="svg-upvote-black"></div>
+					<div class="upvote-count">{{post.vote_count}}</div>
+					<div data-sub="{{post.sub}}" data-slug="{{post.slug}}" class="downvote-post {% if post.downvoted %} downvoted {% endif %}"><img src="/api/i/pixel" class="svg-downvote-black"></div>
+				</div>
+			</div>
+			{% endif %}
+			{% if post.entity == 'story' %}
+			<div class="post-in-list post-in-list-playlist">
+				<div class="post-in-list-title" data-navigate="/one/{{post.sub}}/{{post.slug}}/{{post.url}}">{{post.title}}</div>
+				<div class="twobytwocovers">
+					<img src="/frontend/images/story_placeholder.png" alt="" class="post-in-list-image">
+				</div>
+				<p class="submission-bar">submitted {{post.timestamp}} by {{post.user}} to <a data-navigate="/one/{{sub}}">{{post.sub}}</a></p>
+				<p class="post-action-bar"><a data-navigate="/one/{{post.sub}}/{{post.slug}}/{{post.url}}">{{post.comments}} {% if post.comments == 1 %}comment{% else %}comments{% endif %}</a>{% if post.deletable %} <a class="delete-post" data-id="{{post._id.toString()}}">Delete</a> {% endif %}</p>
+				<div class="vote-module" data-vote="{{post.vote}}">
+					<div data-sub="{{post.sub}}" data-slug="{{post.slug}}" class="upvote-post {% if post.upvoted %} upvoted {% endif %}"><img src="/api/i/pixel" class="svg-upvote-black"></div>
+					<div class="upvote-count">{{post.vote_count}}</div>
+					<div data-sub="{{post.sub}}" data-slug="{{post.slug}}" class="downvote-post {% if post.downvoted %} downvoted {% endif %}"><img src="/api/i/pixel" class="svg-downvote-black"></div>
+				</div>
+			</div>
+			{% endif %}

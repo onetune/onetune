@@ -1,0 +1,63 @@
+{% if sub %}
+	{% include './subtune-header.html' with sub %}
+{% endif %}
+<div class="submit-page">
+	<div class="box-v2">
+		{% if user %}
+			<p class="submit-step">Choose a community you want to submit to:</p>
+			<ul class="submit-ones">
+				{% for sub in subs %}
+					<li {% if selected == sub.name %}class="submit-sub-selected"{% endif %}>{{sub.name}}</li>
+				{% endfor %}
+			</ul>
+			<hr>
+			<p class="submit-step">Choose what you want to submit:</p>
+			<ul class="submit-types">
+				<li data-type="song" class="submit-type-selected">song</li>
+				<li data-type="playlist">playlist</li>
+				<li data-type="story">discussion</li>
+			</ul>
+			<hr>
+			<div class="submit-song-area">
+				<p class="submit-step">Choose a song you want to submit:</p>
+				<div class="selected-area">
+					{% if song %}
+						<!-- Also change markup at submit.js! -->
+						<div data-id="{{song.id}}" class="submit-song-box">
+							<img src="{{song.image}}" alt="" class="submit-song-box-image">
+							<div class="submit-song-box-name">{{song.name}}</div>
+							<div class="submit-song-box-artist">{{song.artist}}</div>
+							<div class="submit-song-select-another">Select another</div>
+						</div>
+					{% endif %}
+				</div>
+				<div class="song-picker-activator">
+					<input class="song-picker-input" placeholder="{% if song %}Or select another{% else %}Enter song...{% endif %}">
+					<div class="song-picker-container"></div>
+				</div>
+			</div>
+			<div class="submit-playlist-area">
+				<p class="submit-step">Choose a playlist you want to submit:</p>
+				<div class="compose-select-playlist compose-div">
+
+				</div>
+				<span class="submit-playlist-notice">If you submit your playlist, it will become public.</span>
+			</div>
+			<div class="submit-story-area">
+				<p class="submit-step">Write a post!</p>
+				<span class="submit-playlist-notice">(You can use <span class="markdown-label" href="https://en.support.wordpress.com/markdown-quick-reference/">Markdown</span> to format your text)</span>
+					<div class="compose-div">
+						<input class="submit-post-title" type="text" autofocus placeholder="Post title">
+						<textarea class="submit-post-content" cols="30" rows="10" placeholder="Write something..."></textarea>
+					</div>
+
+			</div>
+			<p class="one-submit-error"></p>
+			<div class="orange-button submit-submit">Send</div>
+		{% else %}
+			<h2>Submit</h2>
+			<p>Post tracks you found to our community forums and let other people vote on your submissions - or start a discussion! Simply create an account or login to start submitting:</p>
+			<div data-navigate="/register" class="orange-button navigateup">Login or register</div>
+		{% endif %}
+	</div>
+</div>

@@ -1,0 +1,15 @@
+<h1>Playlist categories</h1>
+
+{% for item in categories %}
+	{% include './playlistcategory.html' %}
+{% endfor %}
+
+<h1>Create</h1>
+<form action="/admin/playlists/create" method="POST">
+	<input type="text" name="name" placeholder="Name"> <br>
+	<input type="text" name="image" placeholder="Image URL"> <label for="image">AWS URL (60x60)</label> <br>
+	<input type="text" name="id" placeholder="Identifier"> <label for="id">Unique playlist category identifier</label> <br>
+	<input type="text" name="child_of" placeholder="Child of"> <label for="child_of">Enter identifier of parent category or leave blank</label> <br>
+
+	<input type="submit">
+</form>

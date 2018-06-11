@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>OneTune - all your music in one </title>
+	<script src="/frontend/scripts/jquery.js"></script>
+</head>
+<body>
+	<div class="banner" id="banner1">
+		<div class="banner-box">
+			<h1>Welcome to one<strong>tune</strong>.fm</h1>
+			<h2>Stream millions of songs from all over the world</h2>
+		</div>
+		<video autoplay src="/api/video/banner1/mp4">
+		</video>
+	</div>
+	<div class="banner" id="banner2">
+		<div class="banner-box">
+			<h1>Welcome to one<strong>tune</strong>.fm</h1>
+			<h2>Save any song into your library</h2>
+			<video src="/api/video/banner2/mp4"></video>
+		</div>
+	</div>
+	<div class="banner" id="banner3">
+		<div class="banner-box">
+			<h1>Welcome to one<strong>tune</strong>.fm</h1>
+			<h2>We add metadata to any song on YouTube - you can contribute!</h2>
+			<video src="/api/video/banner3/mp4"></video>
+		</div>
+	</div>
+	<style>
+		* {
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			-ms-box-sizing: border-box;
+			box-sizing: border-box;
+		}
+		.banner {
+			font-family: 'Open Sans';
+			width: 100%;
+			padding: 20px;
+			height: 350px;
+			position: absolute;
+			top: 0;
+			left: 0;
+			background: white;
+		}
+		.banner-box {
+			width: calc(100% - 390px);
+		}
+		video {
+			position: absolute;
+			right: 0;
+			top: 0;
+			width: 350px;
+			height: 350px;
+			background: white;
+		}
+		h1 {
+			font-weight: 300;
+			opacity: 0.67;
+		}
+		h2 {
+			font-weight: 200;
+			opacity: 0.6;
+		}
+		#banner2, #banner3 {
+			display: none;
+		}
+	</style>
+	<script>
+	$(document).ready(function() {
+		setTimeout(function () {
+			$('#banner1').fadeOut();
+			$('#banner2').fadeIn(function() {
+				$(this).find('video')[0].play()
+			})
+		}, 6000);
+		setTimeout(function () {
+			$('#banner2').fadeOut();
+			$('#banner3').fadeIn(function () {
+				$(this).find('video')[0].play();
+			})
+		}, 12000);
+	});
+	</script>
+</body>
+</html>

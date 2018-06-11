@@ -1,0 +1,11 @@
+<div style="border: 1px solid black; margin-left: 20px;">
+	Name: {{item.name}} <br>
+	ID: {{item.id}} <br>
+	URL: <a href="{{item.image}}">{{item.image}}</a><br>
+	{% if item.children %}
+	Children: <br>
+		{% for item in item.children %}
+			{% include './playlistcategory.html' %}
+		{% endfor %}
+	{% endif %}
+</div>

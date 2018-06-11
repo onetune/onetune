@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>OneTune Admin</title>
+</head>
+<body>
+	<h1>Statistics</h1>
+	<h2>Songs ({{songCount}})</h2>
+	<h2>Users ({{userCount}})</h2>
+	<h2>Reddit bot</h2>
+	<ul>
+		{% for id in watchIds %}
+			<li>{{id}} (<a href="/admin/redditbot/remove/{{id}}">x</a>)</li>
+		{% endfor %}
+	</ul>
+	<form name="input" action="/admin/redditbot/add" method="get">
+	Reddit thread id: <input type="text" name="id">
+	<input type="submit" value="Submit">
+	</form>
+	<h1>Reported songs</h1>
+	<a href="/admin/reported">Reported songs</a>
+	<h1>Subs</h1>
+	<a href="/admin/subs">Subs</a>
+	<h1>Playlist categories</h1>
+	<a href="/admin/playlists">Playlist categories</a>
+</body>
+</html>

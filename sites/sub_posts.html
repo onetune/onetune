@@ -1,0 +1,21 @@
+{% include './subtune-header.html' with sub %}
+<div class="posts-list" data-represents="/one/{{sub.name}}/{{entity}}">
+	{% if tracksInOrder.length == 0 %}
+		<div class="material-box">
+			<h2 class="h3-orange">Nobody submitted {{entity}} recently.</h2>
+			<div class="material-bottom-action" data-navigate="/one/{{sub.name}}/submit" style="display: inline-block;">Be the first one</div>
+		</div>
+	{% endif %}
+	{% for post in tracksInOrder %}
+		{% include './submission.html' with post %}
+	{% endfor %}
+</div>
+<div class="post-pagination">
+	{% if prev %}
+		<a data-navigate="{{prev}}" class="post-navigation previous-page">Previous page</a>
+	{% endif %}
+	<a class="post-navigation current-page">Page {{page}}</a>
+	{% if next %}
+		<a data-navigate="{{next}}" class="post-navigation next-page">Next page
+	{% endif %}
+</div>

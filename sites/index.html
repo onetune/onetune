@@ -1,0 +1,788 @@
+<!doctype html>
+{% if user || allowed %}
+<html lang="en" xmlns:og="http://opengraphprotocol.org/schema/"
+xmlns:fb="http://www.facebook.com/2008/fbml" ng-app="onetuneApp">
+<head>
+	<meta charset="UTF-8">
+	<meta name="apple-itunes-app" content="app-id=924272509">
+	<title>OneTune</title>
+	<link id="favicon" rel="shortcut icon" type="image/png" href="/api/i/favicon"/>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:600,400,300">
+	<link rel="stylesheet" href="/frontend/css/main.css?v={{rev}}">
+	<script src="/frontend/scripts/jquery.js"></script>
+	<script src="/frontend/scripts/knockout.js"></script>
+	{% autoescape false %}
+		{{metatags}}
+	{% endautoescape %}
+</head>
+
+<body {% if isDesktop %} class="desktop" {% endif %}>
+	<!--- <iframe src="/api/cache" style="display: none"></iframe> -->
+	<div id="statusbar-container">
+		<div id="statusbar"></div>
+	</div>
+	<div id="topbar">
+		<div id="search-container">
+			<input type="text" id="search-field" placeholder="{{translate('SEARCH_PLACEHOLDER', language)}}">
+			<img src="/api/i/pixel" class="svg-search-orange search-icon">
+			<span id="search-spinner">
+				<svg width="12" height="12" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" version="1.1">
+					<path d="M 150,0 a 150,150 0 0,1 106.066,256.066 l -35.355,-35.355 a -100,-100 0 0,0 -70.711,-170.711 z" fill="white">
+					    <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 150 150" to="360 150 150" begin="0s" dur="2s" fill="freeze" repeatCount="indefinite"></animateTransform>
+					  </path>
+				</svg>
+			</span>
+			<div id="clear-input">x</div>
+			<div id="search-results">
+				<div class="search-placeholder">
+					<img src="/api/i/pixel" class="svg-music-black">
+					<img src="/api/i/pixel" class="svg-album-black">
+					<img src="/api/i/pixel" class="svg-artist-black">
+					<p class="search-placeholder-title">{{translate('SONGS_ALBUMS_ARTISTS', language)}}</p>
+					<p class="search-placeholder-description">{{translate('SEARCH_DISCOVER_MUSIC', language)}}</p>
+				</div>
+				<ul id="search-results-wrapper">
+
+				</ul>
+			</div>
+		</div>
+		<div id="title"><span id="logo">{% if !live %}dev.{% endif %}one<strong>tune</strong>.fm</div>
+		<div id="userarea">
+			{% if user %}
+				{% if user.first %}
+					<img class="topbar-user-image transition-up" src="https://graph.facebook.com/{{user.id}}/picture?type=square"></img>
+				{% endif %}
+				{% if user.first %}
+					<div class="topbar-username transition-up">{{user.first}} {{user.last}}</div>
+				{% else %}
+					<div class="topbar-username transition-up">{{user.username}}</div>
+				{% endif %}
+				<a class="topbar-logout transition-up" href="/logout">{{translate('LOGOUT', language)}}</a>
+			{% else %}
+				<a class="topbar-login" data-navigate="/register">{{translate('LOGIN_OR_REGISTER', language)}}</a>
+			{% endif %}
+		</div>
+	</div>
+	<div id="sidebar">
+		<ul id="menuitems">
+			<h2>{{translate('MY_MUSIC', language)}}</h2>
+				<li data-navigate="/"><a><img src="/api/i/pixel" class="svg-house-black">{{translate('HOME', language)}}</a></li>
+				<li data-navigate="/library" class="librarymenuitem sidebar-has-tracks"><a><img src="/api/i/pixel" class="svg-music-black">{{translate('LIBRARY', language)}}</a></li>
+				<li data-navigate="/youtube"><img src="/api/i/pixel" class="svg-play-black">{{translate('SHOW_VIDEO', language)}}</li>
+			<h2>{{translate('PLAYLISTS', language)}}</h2>
+			{% if user %}
+			<li class="add-new-playlist"><a><img src="/api/i/pixel" class="svg-plus-black">{{translate('NEW_PLAYLIST', language)}}</a></li>
+			{% else %}
+			<li data-navigate="/new-playlist"><a><img class="svg-plus-black" src="/api/i/pixel">{{translate('NEW_PLAYLIST', language)}}</a></li>
+			{% endif %}
+			<div class="new-playlist-input">
+				<input type="text" class="new-playlist-input-field">
+			</div>
+			<div class="playlists-menu">
+				{% for playlist in collection.playlists %}
+					{% include templates.playlistmenuitem %}
+				{% endfor %}
+			</div>
+			{% if followed_playlists.length > 0 %}
+				<h2 class="followed-playlist-h2">{{translate('FOLLOWED_PLAYLISTS', language)}}</h2>
+				<div class="followed-playlists">
+					{% for playlist in followed_playlists %}
+						{% include templates.playlistmenuitem %}
+					{% endfor %}
+				</div>
+			{% endif %}
+			<h2>{{translate('DISCOVER', language)}}</h2>
+			<li data-navigate="/charts" class="sidebar-has-tracks"><a><img src="/api/i/pixel" class="svg-star-black">{{translate('TOP_CHARTS', language)}}</a></li>
+			<li data-navigate="/genres" class="sidebar-has-tracks"><a><img src="/api/i/pixel" class="svg-upvote-black">{{translate('GENRES', language)}}</a></li>
+			<li data-navigate="/time-machine/2015" class="sidebar-has-tracks"><a><img src="/api/i/pixel" class="svg-time-black">{{translate('TIME_MACHINE', language)}}</a></li>
+			<h2>OneTune</h2>
+			<li data-navigate="/info"><a><img src="/api/i/pixel" class="svg-info-black">{{translate('ABOUT', language)}}</a></li>
+			<li data-navigate="/services"><a><img src="/api/i/pixel" class="png-lastfm-black">Scrobbling</a></li>
+			<li data-navigate="/settings"><a><img src="/api/i/pixel" class="svg-wheel-black">{{translate('SETTINGS', language)}}</a></li>
+			<li data-navigate="/import"><a><img src="/api/i/pixel" class="svg-filter-black"></a>{{translate('IMPORT', language)}}</li>
+			{% if hostname %}
+				<p class="served-from">Served from {{hostname}}</p>
+			{% endif %}
+		</ul>
+	</div>
+	<div id="right-sidebar">
+		<div id="fixed_sidebar">
+			<div id="sidebar-player">
+				<div id="queue"></div>
+				<div class='no-song-playing'></div>
+				<div id="nowplaying-images">
+					<img src="" onload="playerimgload1()" width='225' id='nowplaying-image'>
+					<img src="" onload="playerimgload2()" width='225' id='nowplaying-image2'>
+				</div>
+				<div id="seek-bar">
+					<div id="seek-progress"></div>
+				</div>
+				<div id="player-controls">
+					<div id="rewind">
+						<div class="arrow-left"></div>
+						<div class="arrow-left"></div>
+					</div>
+					<div id="play">
+						<div class="arrow-right"></div>
+					</div>
+					<div id="pause">
+						<div class="vertical-bar"></div>
+						<div class="vertical-bar"></div>
+					</div>
+					<div id="skip">
+						<div class="arrow-right"></div>
+						<div class="arrow-right"></div>
+					</div>
+				</div>
+				<div id="time-left">0:00</div>
+				<div id="time-right">0:00</div>
+				<div id="nowplaying-video-icon" data-navigate="/youtube">
+					<img src="/api/i/pixel" class="svg-youtube-empty">
+				</div>
+				{% if user %}
+					<div id="nowplaying-heart-container" class="not-in-library">
+						<div id="nowplaying-heart" class="heart"></div>
+					</div>
+				{% endif %}
+				<p class="nowplaying-info npinfo-first" id="track-title"><a></a></p>
+				<p class="nowplaying-info" id="track-artist"><a></a></p>
+				<p class="nowplaying-info" id="track-album"><a></a></p>
+				<div id="volume-control">
+					<div id="volume-slider">
+						<div id="volume-slider-inner"></div>
+					</div>
+					<div id="volume-control-bottom"></div>
+				</div>
+				<div id="nowplaying-speaker-icon">
+					<img src="/api/i/pixel" class="svg-speaker-empty">
+				</div>
+			</div>
+		</div>
+		<div id="sidebar-queue"></div>
+	</div>
+	<div id="loading-indicator">
+		<img src="/api/svg/fading-loader" class="fading-loader">
+	</div>
+	<div id="view">
+	</div>
+	<div id="dropfiles">
+
+	</div>
+	<div id="dropfilescontent">
+		<h1>{{translate('DROP_MUSIC_HERE', language)}}</h1>
+		<p>{{translate('DROP_SPOTIFY_FILES', language)}}</p>
+		<p>{{translate('IMPORT_OTHER_SERVICES', language)}}</p>
+	</div>
+	<div id="backdrop">
+
+	</div>
+	<div id="draglabel">Hello</div>
+	<div id="player"></div>
+	<div id="ytplayer" style="opacity: 0; position: absolute; z-index: -3; top: -3000px"></div>
+		<div id="ytapiplayer">
+  		</div>
+		<script>
+			function onYouTubePlayerReady(event) {
+				window.ytplayer = event.target;
+				player.setUpEvents();
+				var shouldLoad = player.nowPlaying.get();
+				if (shouldLoad) {
+					player.playSong(shouldLoad, true);
+					$('#player').removeClass('loading-player');
+				}
+			}
+			var player;
+			    function onYouTubeIframeAPIReady() {
+			   	  var playing = player.nowPlaying.get();
+			   	  var toplay = playing ? playing.ytid : null;
+			      new YT.Player('ytplayer', {
+			        height: '390',
+			        width: '640',
+			        videoId: toplay,
+			        playerVars: {
+			        	html5: '1'
+			        },
+			        events: {
+			          'onReady': onYouTubePlayerReady,
+			          'onStateChange': stateChange,
+			          'onEnded': videoEnded,
+			          'onError': errorOccured
+			        }
+			      });
+			    }
+    </script>
+    <script>
+    	chinchilla = {% autoescape false %}{{chinchilla}}{% endautoescape %}
+    </script>
+	<div id="notifications"></div>
+	<script type="text/template" id="template-home">
+		{% include 'new-home.html' %}
+	</script>
+	<script type="text/template" id="template-v2-song-box">
+		{% include 'v2-song-box.html' %}
+	</script>
+	<script type="text/template" id="template-library">
+		<% if (data.user) { %>
+			<div class="rep-wrapper" data-represents="/library">
+				<div class="coverstack nomargin">
+					<div class="covers">
+						<% _.each(data.coverstack, function(image) { %>
+							<img onload="$(this).addClass('coverstack-cover-loaded')" src="<%- image %>" border="0">
+						<% }); %>
+						<div class="coverstack-overlay"></div>
+					</div>
+					<div class="playlistdescription coverstack-description">
+						<h1>Your library
+						<% if (data.trackcount) { %>
+							<span class="playlist-trackcount"><%- data.trackcount %></span><span class="playlist-plural-singular-tracks"><% if (data.trackcount == 1) { %>track<% } else { %>tracks<% } %></span><span data-duration="<%- data.rawduration %>" class="playlist-duration"><%- data.duration %></span>
+						<% } else { %>
+							<span class="playlist-trackcount">0</span> <span class="playlist-plural-singular-track">tracks</span><span data-duration="0" class="playlist-duration">0 minutes</span>
+						<% } %></h1>
+						<div class="headeroptions">
+							<button class="play-all-songs-in-order">
+								<span>Play</span>
+							</button>
+						</div>
+						<div class="headeroptions">
+							<button class="play-all-songs">
+								<span>Shuffle</span>
+							</button>
+						</div>
+						<div class="headeroptions">
+							<button class="add-tracks-quickly" data-trigger="add-tracks-dropdown">
+								<span>Add tracks</span>
+							</button><br>
+						</div>
+						<div class="headeroptions">
+							<button class="show-filter-dropdown" data-list="/library" data-trigger="filter-dropdown">
+								<span>Filter tracks</span></img>
+							</button>
+						</div>
+						<div class="headeroptions">
+							<button data-trigger="playlist-import-tip">
+								<span>Import</span>
+							</button><br>
+						</div>
+						<div class="header-panels">
+							<div class="add-tracks-dropdown" style="display: none;">
+								<div class="song-picker-activator">
+									<input autofocus data-action="add-track" data-target="/library>" class="song-picker-input" placeholder="Enter song...">
+									<div class="song-picker-container"></div>
+								</div>
+							</div>
+							<div class="filter-dropdown" data-list="/library">
+
+							</div>
+							<div class="playlist-import-tip">
+								You can import Spotify tracks by dragging them into this window!
+								Tip: Use Ctrl+A / ⌘A to select all tracks in Spotify!
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="extendedtable">
+					<%= data.tracklist %>
+				</div>
+						<% } else { %>
+				<div class="facebook-login-dialog transition-up">
+					<h1>Build your library and create playlists.</h1>
+					<p>
+					With OneTune, you can listen to millions of songs for free.<br>
+						When you login, you can save your favorite songs and organize them into playlists.<br>
+					</p>
+					<img src="https://i.imgur.com/24XgzfI.png" width="600" />
+					<p>
+						<button class='login-button' data-navigate="/register" class="facebook">Login or Register</button> <br>
+						<small>We never post to your timeline or send you emails.</small>
+					</p>
+				</div>
+			</div>
+		<% } %>
+	</script>
+	<script type="text/template" id="template-filter">
+		<div class='filter-initialized'>
+			<% _.each(data, function (tracks, genre) { %>
+				<input type='checkbox' id='filter-<%= genre %>' data-genre="<%= genre %>" class="filter filter-genre"><label for='filter-<%= genre %>'><%= genre %> (<%= tracks.length %>)</label>
+			<% }); %>
+		</div>
+	</script>
+	<script type="text/template" id="template-playlist">
+	<div class="rep-wrapper <% if (chinchilla.loggedin && chinchilla.user == data.playlist.owner) { %>playlist-editable<% } %>" data-represents="<%= data.playlist.url %>">
+		<div class="playlist-header-v3" <% if (data.playlist.style) { %> style="background: rgb(<%= data.playlist.style.bgColor %>)" <% } %> >
+			<div class="pl-v3-filter">
+				<input type="text" placeholder="Filter" data-url="<%- data.playlist.url %>">
+				<img src="/api/i/pixel" class="png-icon-search">
+			</div>
+			<div class="pl-v3-details">
+				<% if (data.playlist.trackcount) { %>
+					<p><span  <% if (data.playlist.style) { %> style="background: rgb(<%- data.playlist.style.secondaryColor %>)" <% } %> class="v3-icon-bg"><img class="v3-icon svg-music-white" src="/api/i/pixel"></img></span>
+						<span  <% if (data.playlist.style) { %> style="color: rgb(<%- data.playlist.style.secondaryColor %>)" <% } %> class="playlist-trackcount"><%- data.playlist.trackcount %></span> <span <% if (data.playlist.style) { %> style="color: rgb(<%- data.playlist.style.secondaryColor %>)" <% } %> class="playlist-plural-singular-tracks"><% if (data.playlist.trackcount == 1) { %>track<% } else { %>tracks<% } %></span>
+				<% } else { %>
+					<p>
+						<span <% if (data.playlist.style) { %> style="color: rgb(<%- data.playlist.style.secondaryColor %>)" <% } %> class="playlist-trackcount">0</span><span <% if (data.playlist.style) { %> style="color: rgb(<%- data.playlist.style.secondaryColor %>)" <% } %> class="playlist-plural-singular-track">tracks</span>
+				<% } %>
+					<span <% if (data.playlist.style) { %> style="background: rgb(<%- data.playlist.style.secondaryColor %>)" <% } %> class="v3-icon-bg" ><img class="v3-icon svg-community-white" src="/api/i/pixel"></img></span>
+					<span <% if (data.playlist.style) { %> style="color: rgb(<%- data.playlist.style.secondaryColor %>)" <% } %> class="playlist-followercount"><% if (data.playlist.followercount == 1) { %>1 follower<% } else { %> <%= data.playlist.followercount %> followers<% } %></span>
+				</p>
+				<div <% if (data.playlist.style) { %> style="background: rgb(<%- data.playlist.style.secondaryColor %>)" <% } %> class="v3-header-button v3-icon-bg play-all-songs"><img class="v3-icon-big v3-color-matching  <% if (data.playlist.style && data.playlist.style.dark == 'false') { %>white<% } %> png-icon-play" src="/api/i/pixel"></img></div>
+				<% if (chinchilla.user == data.playlist.owner) { %>
+					<div <% if (data.playlist.style) { %> style="background: rgb(<%- data.playlist.style.secondaryColor %>)" <% } %> class="v3-header-button v3-icon-bg playlist-add-button"><img class="v3-icon-big v3-color-matching  <% if (data.playlist.style && data.playlist.style.dark == 'false') { %>white<% } %> png-icon-add" src="/api/i/pixel"></img></div>
+				<% } else { %>
+					<% if (data.playlist.following) { %>
+						<div <% if (data.playlist.style) { %> style="background: rgb(<%- data.playlist.style.secondaryColor %>)" <% } %> data-url="<%= data.playlist.url %>" class="unfollow-playlist v3-header-button v3-icon-bg"><img class="v3-icon-big v3-color-matching  <% if (data.playlist.style && data.playlist.style.dark == 'false') { %>white<% } %> png-icon-save" src="/api/i/pixel"></img></div>
+					<% } else { %>
+						<div <% if (data.playlist.style) { %> style="background: rgb(<%- data.playlist.style.secondaryColor %>)" <% } %> data-url="<%= data.playlist.url %>" class="follow-playlist v3-header-button v3-icon-bg"><img class="v3-icon-big v3-color-matching  <% if (data.playlist.style && data.playlist.style.dark == 'false') { %>white<% } %> png-icon-unsave" src="/api/i/pixel"></img></div>
+					<% } %>
+				<% } %>
+				<div <% if (data.playlist.style) { %> style="background: rgb(<%- data.playlist.style.secondaryColor %>)" <% } %> class="v3-header-button v3-icon-bg playlist-search-button"><img class="v3-icon-big v3-color-matching  <% if (data.playlist.style && data.playlist.style.dark == 'false') { %>white<% } %> png-icon-search" src="/api/i/pixel"></img></div>
+				<% if (chinchilla.user == data.playlist.owner) { %>
+					<div <% if (data.playlist.style) { %> style="background: rgb(<%- data.playlist.style.secondaryColor %>)" <% } %> class="v3-header-button v3-icon-bg playlist-more-button"><img class="v3-icon-big v3-color-matching  <% if (data.playlist.style && data.playlist.style.dark == 'false') { %>white<% } %> png-icon-more" src="/api/i/pixel"></img></div>
+				<% } %>
+				<div class="playlist-more-menu">
+					<img class="v3-icon-big png-icon-more" src="/api/i/pixel"></img>
+					<% if (chinchilla.user == data.playlist.owner) { %>
+							<% if (data.playlist['public']) { %>
+								<div class="v3-more-button unpublish-playlist" data-url="<%= data.playlist.url %>">
+								<img src="/api/i/pixel">
+									<span>Unpublish playlist</span>
+								</div>
+							<% } else { %>
+								<div class="v3-more-button publish-playlist" data-url="<%= data.playlist.url %>">
+									<img src="/api/i/pixel">
+									<span>Publish playlist</span>
+								</div>
+							<% } %>
+							<div class="v3-more-button v3-import" data-navigate="/import">
+								<img src="/api/i/pixel">
+								<span>Import</span>
+							</div>
+							<div class="v3-more-button v3-rename-playlist">
+								<img src="/api/i/pixel">
+								<span>Rename</span>
+							</div>
+							<div class="v3-more-button v3-delete-playlist" data-url="<%= data.playlist.url %>">
+								<img src="/api/i/pixel">
+								<span>Delete</span>
+							</div>
+					<% } %>
+				</div>
+				<div class="playlist-add-menu">
+					<img class="v3-icon-big png-icon-add" src="/api/i/pixel"></img>
+					<div class="add-tracks-dropdown">
+						<div class="song-picker-activator">
+							<input autofocus data-action="add-track" data-target="<%= data.playlist.url %>" class="song-picker-input" placeholder="Enter song..." type="text">
+							<div class="song-picker-container"></div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<h2 <% if (data.playlist.style) { %> style="color: rgb(<%- data.playlist.style.secondaryColor %>)" <% } %> >Playlist by <%- helpers.getAuthorFromPlaylistURL(data.playlist.url) %>
+			</h2>
+			<h1 <% if (data.playlist.style) { %> style="color: rgb(<%= data.playlist.style.primaryColor %>)" <% } %>>
+				<%= data.playlist.name %>
+			</h1>
+			<div class="canvas-placeholder">
+				<% if (data.playlist.style) { %>
+					<img src="<%= data.playlist.style.url %>">
+				<% } %>
+			</div>
+			<div class="feature-placeholder" <% if (data.playlist.style) { %>style="color: rgb(<%- data.playlist.style.secondaryColor %>)" <% } %> ><% if (data.playlist.style) { %> <%= data.playlist.style.artist %> <% } %></div>
+
+		</div>
+		<div class="extendedtable">
+			<% if (!data.playlist.trackcount) { %>
+				<p class="no-playlist-text">Build your playlist right from this page by<br/>clicking the "+" button on top!</p>
+			<% } %>
+			<div class="album-tracks">
+				<%= data.tracklist %>
+			</div>
+		</div>
+	</div>
+	</script>
+
+	<script type="text/template" id="template-tracklist">
+		<div class="album-tracks">
+			<% if (album.cds) { %>
+				<% _.each(album.cds, function(cd, key) { %>
+					<% if (album.cds.length > 1) { %>
+						<h1>Disc <%- (key+1) %></h1>
+					<% } %>
+					<div class="table-wrapper">
+						<div class='table-header'>
+							<div data-value="menu"></div>
+							<div data-value="name" data-order>Name</div>
+							<% if (showartistalbum) { %>
+								<div data-value="artist" data-order>Artist</div>
+								<div data-value="album" data-order>Album</div>
+							<% } %>
+							<div data-value="duration" data-order>Length</div>
+						</div>
+						<table>
+							<%= templates.buildSongsInList(cd[key], {showartistalbum: showartistalbum}) %>
+						</table>
+					</div>
+				<% }); %>
+			<% } else { %>
+			<p class="album-loading">No tracks available</p>
+			<% } %>
+		</div>
+	</script>
+	<script type="text/template" id="template-song">
+	<% _.each(data.cd, function(track, key) { %>
+				<tr class="song
+				<% if (track.ytid) { %> recognized <% } else { %> not-recognized <% } %>
+				<% if (track.inlib) { %> in-library <% } else { %> not-in-library<% } %>"
+				<% _.each(['album', 'name', 'duration', 'albumid', 'artist', 'artistid', 'image', 'id', 'explicit', 'genre', 'numberinalbum', 'cdinalbum', 'tracks', 'cdcount', 'preview', 'release'], function (key) { %>
+					data-<%- key %>='<%- track[key] %>'
+					<% }); %>
+					<% if (track.ytid) { %> data-ytid="<%- track.ytid %>" <% } %>
+					data-index="<%- key%>"
+				>
+				<td class="inline-actions">
+					<% if (chinchilla.loggedin) { %>
+					<div class="heart"></div>
+					<% } %>
+				</td>
+				<td><% if (data.type == 'home') { %> <%- helpers.parsetext(track.artist) %> - <% } %> <%= helpers.parsetext(track.name) %></td>
+				<% if (data.showartistalbum) { %>
+					<td class="table-artist"><a data-navigate="/artist/<%= track.artistid %>"><%= track.artist %></a></td>
+					<td class="table-album"><a data-navigate="/album/<%= track.albumid %>"><%= helpers.parsetext(track.album) %></a></td>
+				<% } %>
+				<td> <%= helpers.parsetime(track.duration) %></td>
+			</tr>
+		<% }); %>
+	</script>
+	<script type="text/template" id="template-contextmenu">
+		<div class="context-tip">
+			<img src="<%= helpers.getHQAlbumImage(data.song, 225) %>" onload="$(this).removeClass('image-op0')" class="image-op0">
+		</div>
+		<div class="contextmenu-arrow"></div>
+		<div class="context-options">
+			<div data-id="<%= data.song.id %>" class="findandplay">Play</div>
+			<div data-id="<%= data.song.id %>" class="findandqueue">Add to Queue</div>
+			<a data-navigate="/song/<%= data.song.id %>">
+				<div>Song page</div>
+			</a>
+			<% if (data.loggedin) { %>
+				<div data-id="<%= data.song.id %>" class="<% if (data.inlib) { %> library-remove-button <% } else { %> library-button <% } %>"><% if (data.inlib) { %>Remove from library<% } else { %>Add to library<% } %></div>
+				<div data-id="<%= data.song.id %>" class="contextmenu-add-to-playlist">Playlists...</div>
+			<% } %>
+			<div data-navigate="/lyrics/<%= data.song.id %>">Lyrics</div>
+			<% if (data.isPlaylist && data.isOwner) { %>
+				<div class="remove-song-from-playlist-button" data-songid="<%= data.song.id %>" data-url="<%=data.represents %>">Remove from playlist</div>
+			<% } %>
+			<% if (data.isItunesTrack) { %>
+				<div data-navigate="/report/<%= data.song.id %>">Report song</div>
+			<% } else { %>
+				<div data-navigate="/song/<%= data.song.id%>">Edit metadata</div>
+			<% } %>
+
+		</div>
+		<% if (!data.loggedin)  { %>
+			<div class="footnote">
+				Login to see more options
+			</div>
+		<% } %>
+	</script><script type="text/template" id="template-contextmenu-multiple">
+		<div class="context-tip contextmenu-multiple-songs">
+			<h1>Multiple songs</h1>
+		</div>
+		<div class="contextmenu-arrow"></div>
+		<div class="context-options">
+			<% if (data.loggedin) { %>
+				<% if (!data.allInLibrary) { %>
+					<div class="add-multiple-to-library" data-ids="<%= data.ids_string %>">Add all to library</div>
+				<% } %>
+				<% if (!data.noneInLibrary) { %>
+					<div class="remove-multiple-from-library" data-ids="<%= data.ids_string %>">Remove all from library</div>
+				<% } %>
+			<% } %>
+			<% if (data.isPlaylist) { %>
+				<div class="remove-multiple-from-playlist" data-ids="<%= data.ids_string %>" data-url="<%=data.represents %>">Remove all from playlist</div>
+			<% } %>
+		</div>
+		<% if (!data.loggedin)  { %>
+			<div class="footnote">
+				Login to see more options
+			</div>
+		<% } %>
+	</script>
+	<script type="text/template" id="import-template">
+		<% if (chinchilla.loggedin) { %>
+		<div class='import-page'>
+			<div class="import-header material-box">
+				<h2 class="h2-orange">
+					Import <span class="import-trackcount"><%= importqueue.length %> tracks</span> into
+					<select id="playlist-target">
+					 		<option value="/library">Library</option>
+					 		<% _.each(playlists, function(playlist) { %>
+					 			<option value="<%= playlist.url %>"><%= playlist.name %></option>
+					 		<% }); %>
+					 	</select>
+				</h2>
+			</div>
+			<button id="stop-queue">Stop importing</button>
+			<button id="start-queue">Start importing</button>
+			<div class="import-body material-box">
+				<table id="importqueue">
+					<tr>
+						<th>Source</th>
+						<th>Track</th>
+						<th>Status</th>
+					</tr>
+					<% _.each(importqueue, function(track) { %>
+							<%= _.template(tracktmpl, {track: track}) %>
+					<% }) %>
+				</table>
+				<% if (importqueue.length == 0) { %>
+					<p class='import-no-tracks'>No tracks to import</p>
+				<% } %>
+			</div>
+			<hr>
+			<div class='material-box'>
+				<h2 class="h2-orange">How you can import tracks:</h2>
+					<p>Spotify: Use Ctrl+A / ⌘A to select all tracks in Spotify. Then drag them into this window. </p></br>
+					<p>Other providers: We plan on supporting YouTube and MP3 soon.</p>
+				</div>
+			</div>
+		</div>
+		<% }  else { %>
+			<div class="facebook-login-dialog transition-up">
+				<h1>Already have a music collection? Import it.</h1>
+				<p>When you create an account, you can import your playlists from Spotify directly into OneTune. <br>
+					(YouTube and iTunes import coming soon)</p>
+					<img width="600" src="https://i.imgur.com/eqbtccr.png"></img>
+				<p>
+
+					<button class='login-button' data-navigate="/register" class="facebook">Login or Register</button> <br>
+					<small>We never post to your timeline or send you emails.<br>
+				</p>
+			</div>
+		<% } %>
+	</script>
+	<script type="text/template" id="import-track-template">
+		<tr class='import-track'
+		data-importid='<%= track.type.provider %>-<%= track.type.id %>'>
+			<td><%= track.type.provider %></td>
+			<td class="import-trackname">Track <%= track.type.id %></td>
+			<td class='import-status'>Ready to import</td>
+		</tr>
+	</script>
+	<script type="text/template" id="radio-template">
+		<div id='radio'>
+			<div class='radio-header'>
+				<h1 class='radio-type'></h1>
+				<h2 class='radio-based'></h2>
+			</div>
+			<div class='album-slider'>
+				<div class='radio-album-covers'></div>
+				<div class='radio-skip'>
+					<div class='arrow-right'></div>
+					<div class='arrow-right'></div>
+				</div>
+				<div class="spinner">
+				  <div class="dot1"></div>
+				  <div class="dot2"></div>
+				</div>
+			</div>
+			<div class='radio-footer'>
+				<table>
+					<tr>
+					<td>
+						<h2>Your last stations</h2>
+						<div class='radio-stations'>
+
+						</div>
+					</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</script>
+	<script type="text/template" id="radio-song-template">
+		<div class='radio-box song <% if (data.ytid) { %> recognized <% } else { %> not-recognized <% } %>' data-album="<%= data.album %>" data-name="<%= data.name %>" data-duration="<%= data.duration %>" data-albumid="<%= data.albumid %>" data-artist="<%= data.artist %>" data-artistid="<%= data.artistid %>" data-image="<%= data.image %>" data-id="<%= data.id %>" data-explicit="<%= data.explicit %>" data-genre="<%= data.genre %>" data-numberinalbum="<%= data.numberinalbum %>" data-cdinalbum="<%= data.cdinalbum %>" data-tracks="<%= data.tracks %>" data-cdcount="<%= data.cdcount %>" data-preview="<%= data.preview %>" data-release="<%= data.release %>">
+			<img src='<%= helpers.getHQAlbumImage(data, 225) %>'></img>
+			<div class="visual-play-button enable-radio-mode <% if (data.ytid) { %> recognized <% } else { %> not-recognized <% } %> findandplay" data-id="<%= data.id %>">
+				<div class="play-icon"></div>
+			</div>
+		</div>
+	</script>
+	<script type="text/template" id="radio-station-template">
+		<div data-id="<%= data.radio_id %>" class="radio-station">
+			<h3><%= radio.typeLabels[data.type] %></h3>
+			<% if (data.type == "song-radio") { %>
+				<p><%= data.from.title %> - <%= data.from.artist_name %></p>
+			<% } %>
+		</div>
+	</script>
+	<script type="text/template" id="template-sidebar-queue">
+		<% if (player.queues.hasPrevious()) { %>
+			<button class="queue-prev"><img src="/api/i/arrow-left" /></button>
+		<% } %>
+		<h4 class="sidebar-currently-playing-label">Currently playing</h4>
+		<% if (player.queues.hasNext()) { %>
+			<button class="queue-next"><img src="/api/i/arrow-right" /></button>
+		<% } %>
+		<h4 class="sidebar-represent" data-navigate="<%= player.queues.current.represents %>"><%= player.queues.current.name %></h4>
+		<div class="sidebar-queue-tracks">
+		<h5>Upcoming</h5>
+		<% _.each(player.queues.primaryQueue, function (song) { %>
+			<%= templates.buildSidebarQueueEntry({song: song, special: true}) %>
+		<% }); %>
+		<% _.each(player.queues.current.queue, function (song) { %>
+			<%= templates.buildSidebarQueueEntry({song: song}) %>
+		<% }); %>
+		<% _.each(player.queues.current.history, function (song) { %>
+			<%= templates.buildSidebarQueueEntry({song: song}) %>
+		<% }); %>
+		</div>
+	</script>
+	<script type="text/template" id="template-v2-song-page">
+		{% include 'new-song.html' %}
+	</script>
+	<script type="text/template" id="song-page-template">
+		<div class="song-page-full" data-represents="/song/<%= song.id %>">
+			<div class="song-page-container <%= yt_page %>">
+				<div class="coverstack header-onetune">
+					<div class="header-background image-op0" style="background-image: url(<%= headerimage %>)"></div>
+					<img src="<%= headerimage %>" style="opacity: 0; width: 0; height: 0" onload="$('.header-background').removeClass('image-op0')">
+				</div>
+				<table class="song-page-table-container">
+					<tr>
+						<td>
+							<div class="song-page-box transition-up song-page-title material-box">
+									<div class="metadata-finished-container">
+										<% if (user) { %>
+											<div class="song<% if (song.ytid) { %> recognized<% } else { %> not-recognized<% } %><% if (inlib) { %> in-library <% } else { %> not-in-library<% } %>" data-album="<%= song.album %>" data-name="<%= song.name %>" data-duration="<%= song.duration %>" data-albumid="<%= song.albumid %>" data-artist="<%= song.artist %>" data-artistid="<%= song.artistid %>" data-image="<%= song.image %>" data-id="<%= song.id %>" data-explicit="<%= song.explicit %>" data-genre="<%= song.genre %>" data-numberinalbum="<%= song.numberinalbum %>" data-cdinalbum="<%= song.cdinalbum %>" data-tracks="<%= song.tracks %>" data-cdcount="<%= song.cdcount %>" data-preview="<%= song.preview %>" data-release="<%= song.release %>" <% if (song.ytid) { %> data-ytid="<%= song.ytid %>" <% } %>>
+												<div class="song-page-heart-action">
+													<div class="heart"></div>
+												</div>
+											</div>
+
+										<% } %>
+										<h2 class="song-page-track-title"><%= song.name %></h2>
+										<p class="song-page-subtitle">
+											<a data-navigate="/artist/<%= song.artistid %>"><%= song.artist %></a>
+										</p>
+										<p class="song-page-length">
+											<%= parseduration(song.duration) %>
+										</p>
+										<% if (song.provider && song.provider == 'youtube') { %>
+											<div class="material-bottom-action song-page-edit-metadata">Edit metadata</div>
+										<% } %>
+									</div>
+									<div class="edit-metadata-container">
+										<p>Track<input type="text" class="edit-metadata-input" id="edit-metadata-title-input" value="<%= song.name %>"></p>
+										<p>Artist<input type="text" class="edit-metadata-input" id="edit-metadata-artist-input" value="<%= song.artist %>"></p>
+										<p>Album<input type="text" class="edit-metadata-input" id="edit-metadata-album-input"></p>
+										<% if (song.provider && song.provider == 'youtube') { %>
+											<div class="material-bottom-action song-page-submit-metadata">Save</div>
+										<% } %>
+									</div>
+								</div>
+						</td>
+						<% if (song.provider && song.provider == 'youtube') { %>
+						<% } else { %>
+							<td>
+								<div class="song-page-box transition-up song-page-album material-box">
+									<img src="<%=song.image%>" class="material-image-top-right transition-up">
+									<h2>Album</h2>
+									<p><a data-navigate="/album/<%=song.albumid%>"><%=song.album%></a></p>
+									<p><%=song.releaseyear%></p>
+									<div class="material-bottom-action" data-navigate="/album/<%=song.albumid%>">
+										Go to album
+									</div>
+								</div>
+							</td>
+							<td class="song-page-buy">
+								<div class="song-page-box transition-up material-box">
+									<h2>Buy Track</h2>
+									<p>Available on iTunes</p>
+									<a class="material-bottom-action" href="https://itunes.apple.com/us/album/album/id<%=song.albumid%>?i={{song.id}}" target="_blank">
+										Buy track
+									</a>
+								</div>
+							</td>
+						<% } %>
+					</tr>
+				</table>
+				<table class="song-page-table-container">
+				<tr>
+					<td class="song-page-cover">
+						<div class="song-page-box transition-up song-page-cover-box">
+							<div class="song-page-header-cover song<% if (song.ytid) { %> recognized<% } else { %> not-recognized<% } %><% if (inlib) { %> in-library <% } else { %> not-in-library<% } %>" data-album="<%=song.album%>" data-name="<%=song.name%>" data-duration="<%=song.duration%>" data-albumid="<%=song.albumid%>" data-artist="<%=song.artist%>" data-artistid="<%=song.artistid%>" data-image="<%=song.image%>" data-id="<%=song.id%>" data-explicit="<%=song.explicit%>" data-genre="<%=song.genre%>" data-numberinalbum="<%=song.numberinalbum%>" data-cdinalbum="<%=song.cdinalbum%>" data-tracks="<%=song.tracks%>" data-cdcount="<%=song.cdcount%>" data-preview="<%=song.preview%>" data-release="<%=song.release%>" <% if (song.ytid) { %> data-ytid="<%= song.ytid %>" <% } %>>
+								<img src="<%= hqimage %>" onload="$(this).removeClass('image-op0')" class="image-op0">
+								<div class="visual-play-button recognized findandplay" data-id="<%= song.id %>">
+									<div class="play-icon"></div>
+								</div>
+							</div>
+						</div>
+					</td>
+					<td>
+						<div class="song-page-box transition-up song-page-playlist-selection material-box">
+							<div>
+								<h2>Add to Playlist</h2>
+								<div class="song-page-playlist-container">
+									<% if (playlists && playlists.length != 0) { %>
+										<% _.each(playlists, function (playlist) { %>
+											<div data-url="<%= playlist.url%>" data-songid="<%= song.id%>" class="song-page-playlist <% if (!playlist.containssong) { %> add-song-to-playlist-button not-in-playlist <% } else { %> remove-song-from-playlist-button in-playlist contains-song <% } %>">
+												<img class="svg-music-black song-page-playlist-icon" src="/api/i/pixel" class="song-page-playlist-icon">
+												<div class="song-page-playlist-title"><%= playlist.name%></div>
+												<div class="song-page-playlist-tracks"><span class="song-page-playlist-trackcount"><%= playlist.tracks.length%></span> songs</div>
+												<img class="song-page-playlist-check svg-check-white" src="/api/i/pixel">
+											</div>
+										<% }) %>
+									<% } else { %>
+									<p class="no-playlists-available">You have no playlists.</p>
+									<% } %>
+								</div>
+							</div>
+						</div>
+					</td>
+					<td style="min-width: 220px">
+						<div class="song-page-box transition-up song-page-actions material-box">
+							<h2>Actions</h2>
+							<% if (song.provider && song.provider == 'youtube') { %>
+								<a class="findandqueue" data-id="<%= song.id%>"><div>Add to Queue</div></a>
+								<a href="https://youtube.com/watch?v=<%= song.ytid %>" target="_blank"><div>Watch on YouTube</div></a>
+							<% } else { %>
+								<a class="findandqueue" data-id="<%= song.id %>"><div>Add to Queue</div></a>
+								<a data-navigate="/lyrics/<%= song.id %>"><div>See lyrics</div></a>
+								<a href="https://youtube.com/watch?v=<%= song.ytid %>" target="_blank"><div>Watch on YouTube</div></a>
+								<a href="https://itunes.apple.com/us/album/album/id<%= song.albumid %>?i=<%= song.id %>" target="_blank"><div>Buy on iTunes</div></a>
+								<a data-navigate="/report/<%= song.id %>"><div>Report wrong video</div></a>
+							<% } %>
+						</div>
+					</td>
+				</tr>
+				</table>
+			</div>
+		</div>
+	</script>
+	{% if live %}
+	<script src="/frontend/scripts/app.min.js"></script>
+		<script type="text/javascript">
+
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-42803478-1']);
+		  _gaq.push(['_trackPageview']);
+
+		  (function() {
+		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		</script>
+	{% else %}
+	<script src="/frontend/scripts/app.js"></script>
+	<script src="http://localhost:35729/livereload.js"></script>
+	{% endif %}
+</body>
+</html>
+{% else %}
+	{% if block %}
+		<p style="padding: 5px; background: rgb(249, 237, 190); color: black; text-align: center;">{{block %></p>
+	{% endif %}
+	{% include startup %}
+{% endif %}

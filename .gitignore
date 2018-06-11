@@ -1,0 +1,20 @@
+node_modules
+forever
+auth
+auth/auth.js
+config.json
+npm-debug.log
+tests/reports
+deployment
+frontend/scripts/app.js
+frontend/scripts/app.min.js
+bower_components
+yarn-error.log
+
+frontend/css/main.css
+
+*.swp
+newrelic_agent.log
+
+# johannes's local files
+/doc

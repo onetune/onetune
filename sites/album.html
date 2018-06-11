@@ -1,0 +1,40 @@
+{% if album %}
+	<div data-represents="/album/{{album.id}}" data-id="{{album.id}}" data-tracks="{{album.tracks}}" class="album transition-up" data-resource="https://itunes.apple.com/lookup?id={{album.id}}&entity=song&limit=200" data-artist="{{album.artist}}" data-release="{{album.release}}" data-image="{{album.image}}" data-name="{{album.name}}" {% if !fromserver %} data-fetch {% endif %}>
+		<img src="{{ album.image }}" title="{{ album.name }}" class="album-cover image-op0 transition-up" onload="$(this).removeClass('image-op0')">
+		<div class="album-header">
+			<div class="album-releaseyear">
+			{% if type == 'album' %} {{album.artist}} • {% endif %}
+
+			{% if album.released %} {{parseyear(album.release)}} {% else %} {{parseReleaseLeft(album.release)}} {% endif %}
+
+			{% if album.subtitle %} • {{album.subtitle}}{% endif %}</div>
+			<div class="album-name" title="{{album.name}}">{{ album.name }}</div>
+		</div>
+		<div class="album-actions">
+			<div class="play-all-songs-in-order album-action-button"><img src="/api/i/pixel" class="icon-16 svg-play-black"><div class="album-action-button-label">Play all</div></div>
+
+			{% if user %}
+			<div class="add-all-album album-action-button"><img src="/api/i/pixel" class="icon-16 svg-heart-empty-firefox"><div class="album-action-button-label">Add all to library</div></div>
+			{% endif %}
+
+			{% if type == 'artist' %}
+			<div class="album-action-button" data-navigate="/album/{{album.id}}"><img src="/api/i/pixel" class="icon-16 svg-album-black"><div class="album-action-button-label">Show album page</div></div>
+			{% endif %}
+
+			{% if type == 'album' %}
+			<div class="album-action-button" data-navigate="/artist/{{album.artistid}}"><img src="/api/i/pixel" class="icon-16 svg-artist-black"><div class="album-action-button-label">Show artist page</div></div>
+			{% endif %}
+
+			<div class="album-total-length">{{album.tracks}} tracks{% if album.hours %} - {{parsehours(album.hours)}}{% endif %}</div>
+		</div>
+		<div class="album-tracks small-tracklist">
+			{% if album.released %}
+				{% include templates.tracklist %}
+			{% else %}
+				<p>The album is not released yet.</p>
+			{% endif %}
+		</div>
+	</div>
+{% else %}
+<h1>No album found.</h1>
+{% endif %}

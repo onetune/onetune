@@ -1,0 +1,14 @@
+<div class="reddit-wrapper" data-represents="/reddit">
+	<div class="box-title material-box transition-up genre-card">
+		<h2 class="h2-orange">Genre playlists</h2>
+		<p>The top tracks from this week, curated from the reddit community. <a href="https://reddit.com/" _target="blank">https://reddit.com</a></p>
+	</div>
+	<div class="reddit-page">
+		{% for genre in music %}
+			<div data-represents="/r/{{genre.name}}" class="box-wrapper transition-rotate"><h3>{{genre.name}}<br><span class="main-link" data-navigate="/r/{{genre.name}}">See more tracks</span></h3>
+				{% for reddit in genre.songs %}
+					{% include templates.redditbox %}
+				{% endfor %}</div>
+		{% endfor %}
+	</div>
+</div>

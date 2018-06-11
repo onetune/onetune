@@ -1,0 +1,7 @@
+<svg xmlns:x="http://ns.adobe.com/Extensibility/1.0/" xmlns:i="http://ns.adobe.com/AdobeIllustrator/10.0/" xmlns:graph="http://ns.adobe.com/Graphs/1.0/" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/" version="1.1" id="Ebene_1" x="0px" y="0px" width="100px" height="100px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve">
+	<g>
+		<path d="M50,100c27.344,0.018,49.517-22.375,49.541-49.975C99.517,22.381,77.344-0.009,50,0    C22.646-0.009,0.478,22.381,0.459,50.025C0.478,77.625,22.647,100.018,50,100z M50,11.52c21.041,0,38.098,17.23,38.076,38.508    C88.099,71.259,71.041,88.488,50,88.48c-21.049,0.008-38.107-17.223-38.131-38.455C11.893,28.75,28.953,11.52,50,11.52z"/>
+		<path fill-rule="evenodd" clip-rule="evenodd" d="M59.666,75.735c-0.59,0-1.068-0.689-1.068-1.538V38.281H36.166v4.612h4.054    c0.59,0,1.067,0.479,1.067,1.068v30.704c0,0.59-0.478,1.069-1.067,1.069h-4.054v4.764H64.04v-4.764H59.666z"/>
+		<circle fill-rule="evenodd" clip-rule="evenodd" cx="49.94" cy="25.548" r="9.625"/>
+	</g>
+</svg>

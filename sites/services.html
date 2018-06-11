@@ -1,0 +1,40 @@
+<div style="padding: 20px;">
+	<h2>Service integrations</h2>
+	<table>
+		{% if services.length %}
+			<table class="services-table">
+				<tr>
+					<th></th>
+					<th>Name</th>
+					<th>Options</th>
+					<th>Status</th>
+				</tr>
+				{% for service in services %}
+					<tr>
+						<td class="service-icon"><img src="/api/i/pixel" class="png-lastfm-black"></td>
+						<td>
+							{% if service.service == 'lastfm' %}
+								Last.fm
+							{% endif %}
+						</td>
+						<td>
+							{% if service.service == 'lastfm' %}
+								<input type="checkbox" id="scrobble" class="toggle-scrobbling"><label for="scrobble">Scrobble songs</label>
+								<script>
+									var scrobbleEnabled = localStorage.scrobble == 'true'
+									$('#scrobble').prop('checked', scrobbleEnabled)
+								</script>
+							{% endif %}
+						</td>
+						<td><div class="service-connected">Connected as {{service.service_username}}</div></td>
+					</tr>
+				{% endfor %}
+			</table>
+		{% else %}
+			<p>No services yet.</p>
+		{% endif %}
+
+		<p class="service-add">Click here to connect to <a href="/lastfm/auth">Last.fm</a>.</p>
+		<p class="service-add">We are planning on adding more services such as Spotify and YouTube in the future.</p>
+	</table>
+</div>

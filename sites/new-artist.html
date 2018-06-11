@@ -1,0 +1,53 @@
+<div class="artist-page" data-represents="/artist/{{artist.id}}">
+	{% if artist %}
+		<div class="coverstack header-onetune">
+			<div class="header-background image-op0" style="background-image: url({{headerimage}})">
+			</div>
+			<img src="{{headerimage}}" style="opacity: 0; width: 0; height: 0" onload="$('.header-background').removeClass('image-op0')">
+			<div class="playlistdescription coverstack-description">
+				<h1 class="transition-up">{{artist.name}}</h1>
+				<button class="play-all-songs-in-order transition-up">
+					<span>Play</span>
+				</button>
+				<button class="play-all-songs transition-up">
+					<span>Shuffle</span>
+				</button>
+			</div>
+		</div>
+		<div class="artist-page-two-columns">
+			<div class="artist-page-right-column">
+				{% if top10 %}
+					<div class="top10-wrapper transition-up">
+						<h2>Top tracks</h2>
+						<section class="top10">
+							{% for album in top10 %}
+								{% include templates.tracklist %}
+							{% endfor %}
+						</section>
+					</div>
+				{% endif %}
+				<section class="album-list artist-album-container artist-page-table artist-container transition-up">
+					{% if albums %}
+						<h2>Albums</h2>
+						{% for album in albums %}
+							{% if album.hidden %}
+							<div class="albumhidden">
+								<div class="albumhidden-message">{{album.hidden}} {{album.name}}. Click to show anyway.</div>
+								<div class="hidden-album-container">
+							{% endif %}
+									{% include templates.album %}
+							{% if album.hidden %}
+								</div>
+							</div>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+				</section>
+			</div>
+		</div>
+
+
+	{% else %}
+		<h1>No artist found.</h1>
+	{% endif %}
+</div>

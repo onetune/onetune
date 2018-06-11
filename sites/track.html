@@ -1,0 +1,140 @@
+<div>
+    <div class="single-song">
+        <h1><span>{{song.name}}</span></h1><br>
+        <h2><span>by <a data-navigate="/artist/{{song.artistid}}">{{song.artist}}</a></span></h2><br>
+        <div class="box">
+            <header>
+                <p>Cover</p>
+            </header>
+            <article class="single-song-img">
+                <img src="{{image}}">
+            </article>
+        </div>
+        <div class="box">
+            <header>
+                <p>Info</p>
+            </header>
+            <article class="single-song-description">
+                <table>
+                    <tr>
+                        <td>Name</td>
+                        <td>{{song.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Artist</td>
+                        <td><a data-navigate="/artist/{{song.artistid}}">{{song.artist}} (See full discography)</a></td>
+                    </tr>
+                    <tr>
+                        <td>Album</td>
+                        <td><a data-navigate="/album/{{song.albumid}}">{{song.album}} (See full album)</a></td>
+                    </tr>
+                    <tr>
+                        <td>Duration</td>
+                        <td>{{parseduration(song.duration)}}</td>
+                    </tr>
+                    <tr>
+                        <td>Explicit</td>
+                        <td>{% if explicit%}Yes{% else %}No{% endif %}</td>
+                    </tr>
+                    <tr>
+                        <td>Number in CD</td>
+                        <td>{{song.numberinalbum}}/{{song.tracks}}</td>
+                    </tr>
+                    <tr>
+                        <td>CD in album</td>
+                        <td>{{song.cdinalbum}}/{{song.cdcount}}</td>
+                    </tr>
+                </table>
+            </article>
+        </div>
+        <div class="box">
+            <header>
+                <p>Actions</p>
+            </header>
+            <article class="single-song-actions">
+                <div class="play-button recognized" data-album="{{song.album}}" data-name="{{song.name}}" data-duration="{{song.duration}}" data-albumid="{{song.albumid}}" data-artist="{{song.artist}}" data-artistid="{{song.artistid}}" data-image="{{song.image}}" data-id="{{song.id}}" data-explicit="{{song.explicit}}" data-genre="{{song.genre}}" data-numberinalbum="{{song.numberinalbum}}" data-cdinalbum="{{song.cdinalbum}}" data-tracks="{{song.tracks}}" data-cdcount="{{song.cdcount}}" data-preview="{{song.preview}}" data-release="{{song.release}}" {% if song.ytid %} data-ytid="{{song.ytid}}" {% endif %}>Play</div>
+                <div class="queue-button recognized" data-album="{{song.album}}" data-name="{{song.name}}" data-duration="{{song.duration}}" data-albumid="{{song.albumid}}" data-artist="{{song.artist}}" data-artistid="{{song.artistid}}" data-image="{{song.image}}" data-id="{{song.id}}" data-explicit="{{song.explicit}}" data-genre="{{song.genre}}" data-numberinalbum="{{song.numberinalbum}}" data-cdinalbum="{{song.cdinalbum}}" data-tracks="{{song.tracks}}" data-cdcount="{{song.cdcount}}" data-preview="{{song.preview}}" data-release="{{song.release}}" {% if song.ytid %} data-ytid="{{song.ytid}}" {% endif %}>Add to queue</div>
+                <div class="{% if inlib %} library-remove-button {% else %} library-button {% endif %} recognized" data-album="{{song.album}}" data-name="{{song.name}}" data-duration="{{song.duration}}" data-albumid="{{song.albumid}}" data-artist="{{song.artist}}" data-artistid="{{song.artistid}}" data-image="{{song.image}}" data-id="{{song.id}}" data-explicit="{{song.explicit}}" data-genre="{{song.genre}}" data-numberinalbum="{{song.numberinalbum}}" data-cdinalbum="{{song.cdinalbum}}" data-tracks="{{song.tracks}}" data-cdcount="{{song.cdcount}}" data-preview="{{song.preview}}" data-release="{{song.release}}" {% if song.ytid %} data-ytid="{{song.ytid}}" {% endif %}>{% if inlib %}Remove from library{% else %}Add to library{% endif %}</div>
+                <div class="star-button recognized" data-album="{{song.album}}" data-name="{{song.name}}" data-duration="{{song.duration}}" data-albumid="{{song.albumid}}" data-artist="{{song.artist}}" data-artistid="{{song.artistid}}" data-image="{{song.image}}" data-id="{{song.id}}" data-explicit="{{song.explicit}}" data-genre="{{song.genre}}" data-numberinalbum="{{song.numberinalbum}}" data-cdinalbum="{{song.cdinalbum}}" data-tracks="{{song.tracks}}" data-cdcount="{{song.cdcount}}" data-preview="{{song.preview}}" data-release="{{song.release}}" {% if song.ytid %} data-ytid="{{song.ytid}}" {% endif %}>Add to favorites</div>
+                <div>
+                    <a target="_blank" href="https://youtube.com/watch?v={{song.ytid}}">Watch on YouTube</a>
+                </div>
+                <div>
+                <a target="_blank" href="https://www.filsh.net/?url=http%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%{{song.ytid}}">Download MP3 with filsh.net</a>
+                </div>
+                <div>
+                    Lookup on Spotify
+                </div>
+                <div>
+                    Share
+                </div>
+            </article>
+        </div>
+        <div class="box echonest">
+            <header>
+                <p>Analysis by EchoNest</p>
+            </header>
+            <article class="single-song-analysis">
+                <div class="echonest-container">Loading information from EchoNest...</div>
+                <script>
+                    $.ajax({
+                        url: "https://developer.echonest.com/api/v4/song/search?api_key=E12U4JDSGYU7F1SRE&format=jsonp&results=1&artist={{song.artist}}&title={{song.name}}",
+                        success: function(json) {
+                        if (json.response.songs.length == 0) {
+                            $(".echonest").remove();
+                            return
+                        }
+                        var songid = json.response.songs[0].id;
+                        if (songid) {
+                            $.getJSON("https://developer.echonest.com/api/v4/song/profile?api_key=FILDTEOIK2HBORODV&format=jsonp&id=" + songid + "&bucket=audio_summary&callback=?", function(json) {
+                                var summary = json.response.songs[0].audio_summary;
+                                var table   = $('<table>')
+                                var fields    = {
+                                    'Danceability': 'danceability',
+                                    'Energy':       'energy',
+                                    'Speechiness':  'speechiness',
+                                    'Tempo':        'tempo',
+                                    'Loudness':     'loudness',
+                                    'Pitch':        'key'
+                                }
+                                $.each(fields, function(label, key) {
+                                    var tr      = $('<tr>'),
+                                        value   = summary[key],
+                                        text
+                                    if (key == 'danceability' || key == 'energy' || key == 'speechiness') {
+                                        text = Math.round(value*100)+ '%';
+                                    }
+                                    else if (key == 'tempo') {
+                                        text = '<div style="width: 50px; -webkit-animation: bpm ' + (60/value) + 's infinite" class="bpm">' + Math.round(value) + ' bpm</div>';
+                                    }
+                                    else if (key == 'loudness') {
+                                        text = (Math.round(value)) + 'dB'
+                                    }
+                                    else if (key == 'key') {
+                                        var notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'],
+                                            note  = (key == -1) ? 'N/A' :  notes[value],
+                                            modes = ['minor', 'major'],
+                                            mode  = (summary.mode == -1) ? '' : modes[summary.mode];
+                                        text = note + " " + mode;
+                                    }
+                                    else {
+                                        text = value;
+                                    }
+                                    var td1 = document.createElement("td"),
+                                        td2 = document.createElement("td");
+                                    td1.innerHTML = label;
+                                    td2.innerHTML = text;
+                                    tr.append(td1).append(td2)
+                                    $(tr).appendTo(table)
+                                });
+                                $('.echonest-container').html(table);
+                            });
+                        }
+                    },
+                    dataType: 'jsonp'
+                });
+                </script>
+            </article>
+        </div>
+    </div>
+</div>

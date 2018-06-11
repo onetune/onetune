@@ -1,0 +1,27 @@
+<div class="album-tracks">
+	{% if album.cds %}
+		{% for cd in album.cds %}
+			{% if album.cds.length > 1  %}
+				<h1>Disc {{loop.key+1}}</h1>
+			{% endif %}
+			<div class="table-wrapper">
+				{% if album.type != 'top10' %}
+				<div class='table-header'>
+					<div data-value="menu"></div>
+					<div data-value="name" data-order>Name</div>
+					{% if showartistalbum %}
+					<div data-value="artist" data-order>Artist</div>
+					<div data-value="album" data-order>Album</div>
+					{% endif %}
+					<div data-value="duration" data-order>Length</div>
+				</div>
+				{% endif %}
+				<table {% if album.type == 'top10' %} class="albumtop10" {% endif %}>
+					{% include templates.song %}
+				</table>
+			</div>
+		{% endfor %}
+	{% else %}
+	<p class="album-loading">No tracks available</p>
+	{% endif %}
+</div>

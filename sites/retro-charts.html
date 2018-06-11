@@ -1,0 +1,53 @@
+{% if year %}
+<div class="rep-wrapper" data-represents="/time-machine/{{year}}" style="margin-top: -10px">
+	<div class="coverstack nomargin" style="overflow-y: visible;">
+		<div class="covers" style="padding-top: 9px">
+			{% for image in coverstack %}<img src="{{image}}" border="0">{% endfor %}
+			<div class="coverstack-overlay"></div>
+		</div>
+		</button>
+		<div class="playlistdescription coverstack-description">
+			<h1>Time machine <span class="h1-light">{{year}}</span></h1>
+			<div class="headeroptions">
+				<button class="play-all-songs-in-order">
+					<span>Play</span>
+				</button>
+			</div>
+			<div class="headeroptions">
+				<button class="play-all-songs">
+					<span>Shuffle</span>
+				</button>
+			</div>
+			<div class="headeroptions">
+				<button data-navigate="/charts">
+					<span>Current Charts</span>
+				</button>
+			</div>
+			<div class="headeroptions">
+				<button data-trigger="years-dropdown">
+					<span>Change year: {{year}}</span>
+				</button>
+			</div>
+			<p class="playlist-attribution">Source: Top {{year}} songs according to <a target="_blank" href="https://en.wikipedia.org/wiki/Billboard_Year-End_Hot_100_singles_of_{{year}}">Wikipedia</a></p>
+			<div class="header-panels">
+				<div class="years-dropdown">
+					<p><span class="lighttext">1951</span> <span class="lighttext">1952</span> <span class="lighttext">1953</span> <span class="lighttext">1954</span> <span class="lighttext">1955</span> <span class="lighttext">1956</span> <span class="lighttext">1957</span> <span class="lighttext">1958</span>
+						{% for anno in range %}
+						<span data-navigate="/time-machine/{{anno}}">{% if anno == year %}<strong>{% endif %}{{anno}}{% if anno == year %}</strong>{% endif %}</span> {% if (anno % 10 == 0) %} <br> {% endif %}
+						{% endfor %}
+						 <span class="lighttext">2018</span> <span class="lighttext">2019</span> <span class="lighttext">2020</span>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="extendedtable">
+		<div class="album-tracks">
+			{% include templates.tracklist %}
+		</div>
+	</div>
+</data>
+{% else %}
+Sorry, we don't have charts for this year. Try a year between <a data-navigate="/time-machine/1959">1959</a> and <a data-navigate="/time-machine/2014">2017</a>.
+{% endif %}

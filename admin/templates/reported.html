@@ -1,0 +1,38 @@
+<h1>Reported songs</h1>
+
+<table>
+	<tr>
+		<th>OneTune song</th>
+		<th>fields changed</th>
+		<th>new value</th>
+	</tr>
+	{% for song in data %}
+		<tr>
+			<td>
+				{{song.track.name}} <br>
+				{{song.track.artist}} <br>
+				{{song.track.album}}
+			</td>
+			<td>
+				{% for field in song.keys %}
+					<strong>{{field}}</strong> <br>
+					{% if field == 'ytid' %}
+						(Old video: <br>
+						<a target="_blank" href="https://youtube.com/watch?v={{song.wrong_video.id}}">{{song.wrong_video.title}} <br>
+							{{song.wrong_video.uploader}} <br></a>
+						New video: <br>
+						<a target="_blank" href="https://youtube.com/watch?v={{song.suggestion.id}}">{{song.suggestion.title}} <br>
+							{{song.suggestion.uploader}} <br></a>
+					{% endif %}
+					<br>
+				{% endfor %}
+			</td>
+			<td>
+				{% for value in song.values %}
+					{{value}} <br>
+				{% endfor %}
+			</td>
+			<td><a href="/admin/reported/{{song._id.toString()}}/accept">Accept</a> <a href="/admin/reported/{{song._id.toString()}}/reject">Reject</a></td>
+		</tr>
+	{% endfor %}
+</table>

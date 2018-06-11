@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>OneTuneAdmin - Subs</title>
+</head>
+<body>
+	<h1>Subs ({{subs.length}})</h1>
+	<a href="/admin/subs/insertdefault"><span style="color: red">Caution!:</span> Insert default</a>  Always ask Jonny before clicking this, especially in production
+	{% for sub in subs %}
+		<h2>{{sub.name}}</h2>
+		<p>Reddit: {{sub.reddit}}</p>
+		<p>iTunes: <a href="{{sub.itunes}}">RSS</a></p>
+		<p>Moderators: {% if sub.moderators %} {{sub.moderators}} {% else %} none {% endif %} <form action="/admin/subs/{{sub.name}}/moderator/add">
+			<input type="text" name="moderator">
+			<input type="submit" value="Add Moderator">
+		</form></p>
+	{% endfor %}
+</body>
+</html>

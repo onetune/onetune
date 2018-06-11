@@ -1,0 +1,12 @@
+{% if tracks.length  == 1%}
+	1 track was removed 
+{% else %}
+	{{tracks.length}} tracks were removed 
+{% endif %} 
+
+{% if type == 'library' %}
+	from your library.
+	<span data-navigate="/library">Go to library</span>
+{% else %}
+	from the playlist.
+{% endif %}

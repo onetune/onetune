@@ -1,0 +1,10 @@
+<div id="lyrics-wrapper">
+	<div id='rg_embed_link_{{genius_id}}' class='rg_embed_link'>Read <a href="https://genius.com">&#8220;{{song.name}}&#8221; by {{song.artist}}</a> on Genius</div>
+
+	<script type="text/javascript">
+		function genius_receiver(html) {
+			$('#view').append(html);
+		}
+		{{js|safe}}
+	</script>
+</div>

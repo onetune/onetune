@@ -1,0 +1,31 @@
+<div class="comment" data-id="{{_id.toString()}}">
+	<div class="vote-module" data-vote="{{vote}}">
+		<div class="upvote-comment {% if upvoted %} upvoted {% endif %}"><img src="/api/i/pixel" class="svg-upvote-black"></div>
+		<div class="upvote-count">{{score}}</div>
+		<div class="downvote-comment {% if downvoted %} downvoted {% endif %}"><img src="/api/i/pixel" class="svg-downvote-black"></div>
+	</div>
+	<div class="comment-header">
+		<div class="minify">[-]</div> <span class="comment-submitter">{{submitter}}</span> <span class="comment-timestamp">{{rel_timestamp}}</span>
+	</div>
+	<div class="comment-body markdown">
+		{% autoescape false %}
+		{{html}}
+		{% endautoescape %}
+	</div>
+	<div class="comment-footer">
+		<a class="reply-to-comment">Reply</a>
+		{% if deletable %}
+			<a class="delete-comment" data-id="{{_id.toString()}}">Delete</a>
+		{% endif %}
+	</div>
+	<div class="reply-field">
+		{% include './compose-comment.html' %}
+	</div>
+		<div class="replies">
+			{% if replies %}
+				{% for reply in replies %}
+					{% include './comment.html' with reply only %}
+				{% endfor %}
+			{% endif %}
+		</div>
+</div>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>OneTune Remote</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+	<h1>OneTune remote</h1>
+	<div id="player">
+		<img>
+		<p id="title"></p>
+		<p id="artist"></p>
+		<p id="album"></p>
+	</div>
+	<div id="pair">
+		<p>You can find a pairing code under https://onetune.fm/remote </p>
+		<input type="text" placeholder="Type in code" id="code-input">
+		<button id="pairbutton">Pair</button>
+	</div>
+	<div id="controls" style="display: none">
+		<button data-action="play">Play</button>
+		<button data-action="pause">Pause</button>
+		<button data-action="previous">Previous track</button>
+		<button data-action="next">Next track</button>
+	</div>
+
+	<script>
+	// Connect to the socket server (onetune.fm);
+	var socket = io.connect(window.location.origin);
+	//Listen to the button click event
+	$('#pairbutton').on('click', function () {
+		var code = $('#code-input').val();
+		if (code.length != 5) {
+			alert('The code must be 5 characters long.');
+		}
+		else {
+			socket.emit('/pairing/add-device', { code: code });
+			$('#controls button').on('click', function() {
+				var action = $(this).data('action');
+				socket.emit('/pairing/remote/action', { action: action, code: code});
+			});
+			socket.on('/pairing/device-added', function (data) {
+				console.log(data.message);
+				$('#pair').hide();
+				$('#controls').show();
+
+				socket.on('/pairing/other-device-disconnected', function () {
+					alert('Other device disconnected!');
+				});
+
+				socket.on('/pairing/device-failed', function (data) {
+					alert(data.message);
+				});
+				socket.on('/pairing/push-info', function (data) {
+					if (data.playing) {
+						$('#player img').attr('src', data.playing.image);
+						$('#title').text(data.playing.name);
+						$('#artist').text(data.playing.artist);
+						$('#album').text(data.playing.album);
+					}
+				});
+			});
+		}
+	})
+	</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+
+{% include './subtune-header.html' with sub %}
+<div class="post-page">
+	{% include './submission.html' with post %}
+	{% if post.entity == 'story' %}
+		<div class="box-v2 post-content markdown">
+			{% autoescape false %}
+				{{html}}
+			{% endautoescape %}
+		</div>
+	{% endif %}
+
+	<div class="ranking-picker">
+		<p>{{comment_count}} comments - sort by: <a data-navigate="/one/{{post.sub}}/{{post.slug}}/{{post.url}}?sort=top" data-sort="new" {% if sort != 'new' %} class="ranking-selected" {%  endif %}>Top</a> <a data-navigate="/one/{{post.sub}}/{{post.slug}}/{{post.url}}?sort=new" data-sort="new" {% if sort == 'new' %} class="ranking-selected" {%  endif %}>New</a></p>
+	</div>
+
+	{% set post = post.slug %}
+	{% set _id = null %}
+	{% include './compose-comment.html' %}
+
+	<div class="comment-section">
+		{% for comment in comments %}
+			{% include './comment.html' with comment only %}
+		{% endfor %}
+	</div>
+</div>
